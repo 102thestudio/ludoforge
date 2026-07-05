@@ -1,8 +1,13 @@
 -- Enable UUID extension
 create extension if not exists "uuid-ossp";
 
--- Create ENUM for Plans
-create type public.plan_type as enum ('FREE', 'PRO');
+-- Create ENUM for Plans (idempotent check)
+do $$
+begin
+  if not exists (select 1 from pg_type where typname = 'plan_type') then
+    create type public.plan_type as enum ('FREE', 'PRO');
+  end if;
+end$$;
 
 -- Create Users table
 create table public.users (
