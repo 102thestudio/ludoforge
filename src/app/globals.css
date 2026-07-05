@@ -127,48 +127,54 @@ body {
     margin: 0;
   }
 
+  /* Allow body to grow as tall as needed to fit all pages */
   html, body {
-    width: 21cm;
-    height: 29.7cm;
-    margin: 0;
-    padding: 0;
-    background-color: #FFFFFF;
+    width: 21cm !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: #FFFFFF !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+    overflow: visible !important;
   }
 
-  /* Ocultar elementos de la UI (Tailwind `print:hidden` también funciona) */
+  /* Hide all UI chrome */
   .no-print {
     display: none !important;
   }
 
+  /* The scroll container must expand fully */
   .canvas-center {
     display: block !important;
-    width: auto !important;
+    width: 21cm !important;
     height: auto !important;
+    min-height: unset !important;
     padding: 0 !important;
+    margin: 0 !important;
     overflow: visible !important;
     background: transparent !important;
   }
 
+  /* Remove flex layout and gaps from the page list */
   .page-container {
-    transform: none !important;
+    display: block !important;
+    width: 21cm !important;
+    height: auto !important;
     margin: 0 !important;
     padding: 0 !important;
     gap: 0 !important;
-    display: block !important;
+    transform: none !important;
   }
 
-  /* Hide page section label wrappers, only show the .page itself */
+  /* Collapse the per-page wrapper divs so only .page is laid out */
   .page-container > div {
     display: contents !important;
   }
 
-  .no-print {
-    display: none !important;
-  }
-
+  /* Each page fills exactly one A4 sheet */
   .page {
+    display: block !important;
     margin: 0 !important;
     padding: 0 !important;
     box-shadow: none !important;
@@ -179,6 +185,7 @@ body {
     page-break-inside: avoid;
     break-after: page;
     overflow: hidden !important;
+    position: relative !important;
   }
 
   .grid-table.show-bleed td {

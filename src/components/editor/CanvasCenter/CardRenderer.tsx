@@ -27,7 +27,7 @@ function resolveStyle(item: GameItem, theme: any, templateId: string) {
 }
 
 export function CardRenderer({ card, isBack }: { card: GameItem, isBack?: boolean }) {
-  const { templateId } = useGameStore();
+  const { templateId, cover } = useGameStore();
   const themeState = useThemeStore();
   const { selectedItemId, setSelectedItemId } = useUIStore();
   const theme = getActiveTheme(themeState.themeId, themeState.themeOverrides);
@@ -40,7 +40,7 @@ export function CardRenderer({ card, isBack }: { card: GameItem, isBack?: boolea
   const style = resolveStyle(card, theme, templateId);
 
   if (isBack) {
-    return <CardBack card={card} style={style} theme={theme} templateId={templateId} themeState={themeState} />;
+    return <CardBack card={card} style={style} theme={theme} templateId={templateId} themeState={themeState} cover={cover} />;
   }
 
   const isSelected = selectedItemId === card.id;
@@ -56,6 +56,7 @@ export function CardRenderer({ card, isBack }: { card: GameItem, isBack?: boolea
     />
   );
 }
+
 
 function CardFront({ card, style, theme, templateId, isSelected, onClick }: { card: GameItem, style: any, theme: any, templateId: string, isSelected: boolean, onClick: () => void }) {
   const tpl = GAME_TEMPLATES[templateId] || GAME_TEMPLATES[Object.keys(GAME_TEMPLATES)[0]];
@@ -262,7 +263,7 @@ function ZoneRenderer({ zone, item, theme }: { zone: any, item: GameItem, theme:
   return null;
 }
 
-function CardBack({ card, style, theme, templateId, themeState }: { card: GameItem, style: any, theme: any, templateId: string, themeState: any }) {
+function CardBack({ card, style, theme, templateId, themeState, cover }: { card: GameItem, style: any, theme: any, templateId: string, themeState: any, cover: any }) {
   let backBg = style.background;
   let backTextColor = style.textColor;
   let backBorderColor = style.borderColor;
@@ -275,9 +276,12 @@ function CardBack({ card, style, theme, templateId, themeState }: { card: GameIt
 
   const design = themeState.backDesign || 'classic';
 
-  // Get the game name from the template for the card back label
+  // Use the actual game title set by the user (cover.title), 
+  // fall back to template name if no title has been set yet
   const tpl = GAME_TEMPLATES[templateId] || GAME_TEMPLATES[Object.keys(GAME_TEMPLATES)[0]];
-  const gameName = tpl?.name || templateId || 'LudoForge';
+  const gameName = (cover?.title && cover.title.trim() !== '') 
+    ? cover.title 
+    : (tpl?.name || 'LudoForge');
 
   return (
     <div 
@@ -299,7 +303,7 @@ function CardBack({ card, style, theme, templateId, themeState }: { card: GameIt
             <>
               {design === 'classic' && <div>{card.type === 'question' ? '▲' : '★'}</div>}
               <div style={{ fontSize: design === 'classic' ? '12pt' : '14pt', textAlign: 'center' }}>
-                FIASCO<br/>DE GENTE
+                {gameName}
               </div>
               {design === 'classic' && <div>{card.type === 'question' ? '▼' : '★'}</div>}
             </>
@@ -318,6 +322,7 @@ function CardBack({ card, style, theme, templateId, themeState }: { card: GameIt
     </div>
   );
 }
+
 
 
 export function CoverRenderer({ data }: { data: any }) {
