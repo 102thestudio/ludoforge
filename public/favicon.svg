@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5" />
+      <stop offset="60%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+    
+    <!-- Glow Effect -->
+    <radialGradient id="inner-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Base shape: rounded square with premium shadow-like outline -->
+  <rect x="16" y="16" width="480" height="480" rx="120" fill="url(#bg-grad)" />
+  <rect x="16" y="16" width="480" height="480" rx="120" fill="none" stroke="#ffffff" stroke-width="8" stroke-opacity="0.15" />
+
+  <!-- Inner subtle grid lines representing board game board / layout tool -->
+  <g opacity="0.12" stroke="#ffffff" stroke-width="4" stroke-dasharray="10 10">
+    <line x1="136" y1="16" x2="136" y2="496" />
+    <line x1="256" y1="16" x2="256" y2="496" />
+    <line x1="376" y1="16" x2="376" y2="496" />
+    <line x1="16" y1="136" x2="496" y2="136" />
+    <line x1="16" y1="256" x2="496" y2="256" />
+    <line x1="16" y1="376" x2="496" y2="376" />
+  </g>
+
+  <!-- Glowing core -->
+  <circle cx="256" cy="256" r="160" fill="url(#inner-glow)" />
+
+  <!-- Outer shield representation (board game shield / defense theme) -->
+  <path d="M256 390c70-40 100-110 100-170V160l-100-40-100 40v60c0 60 30 130 100 170z" 
+        fill="none" 
+        stroke="#ffffff" 
+        stroke-width="16" 
+        stroke-linejoin="round" 
+        stroke-linecap="round" />
+
+  <!-- A 3D isometric dice (D6) representing game creation -->
+  <g transform="translate(256, 240)">
+    <!-- Top Face -->
+    <path d="M0 -60 L52 -30 L0 0 L-52 -30 Z" fill="#ffffff" stroke="#ffffff" stroke-width="6" stroke-linejoin="round" />
+    <!-- Left Face -->
+    <path d="M-52 -30 L0 0 L0 60 L-52 30 Z" fill="#e2e8f0" stroke="#ffffff" stroke-width="6" stroke-linejoin="round" />
+    <!-- Right Face -->
+    <path d="M0 0 L52 -30 L52 30 L0 60 Z" fill="#cbd5e1" stroke="#ffffff" stroke-width="6" stroke-linejoin="round" />
+
+    <!-- Dice dots / pips -->
+    <!-- Top face (1 pip) -->
+    <circle cx="0" cy="-30" r="7" fill="#4f46e5" />
+    
+    <!-- Left face (2 pips) -->
+    <circle cx="-26" cy="0" r="6" fill="#4f46e5" />
+    <circle cx="-26" cy="30" r="6" fill="#4f46e5" />
+    
+    <!-- Right face (3 pips) -->
+    <circle cx="13" cy="7.5" r="5.5" fill="#4f46e5" />
+    <circle cx="26" cy="15" r="5.5" fill="#4f46e5" />
+    <circle cx="39" cy="22.5" r="5.5" fill="#4f46e5" />
+  </g>
+
+  <!-- Star/Sparkle representing the "Forge" / creation magic -->
+  <path d="M370 120 L376 132 L388 135 L379 143 L382 155 L370 148 L358 155 L361 143 L352 135 L364 132 Z" fill="#facc15" />
+  <path d="M130 330 L134 338 L142 340 L136 346 L138 354 L130 349 L122 354 L124 346 L118 340 L126 338 Z" fill="#fbbf24" />
+</svg>
