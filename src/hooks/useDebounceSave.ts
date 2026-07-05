@@ -38,6 +38,7 @@ export function useDebounceSave(projectId: string) {
               },
               body: JSON.stringify({
                 gameState: currentState,
+                name: currentState.cover?.title || 'Nuevo Juego',
               }),
             });
 
