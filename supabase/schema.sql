@@ -1,13 +1,13 @@
+-- Clean setup (drop existing schema if running again)
+drop table if exists public.projects cascade;
+drop table if exists public.users cascade;
+drop type if exists public.plan_type cascade;
+
 -- Enable UUID extension
 create extension if not exists "uuid-ossp";
 
--- Create ENUM for Plans (idempotent check)
-do $$
-begin
-  if not exists (select 1 from pg_type where typname = 'plan_type') then
-    create type public.plan_type as enum ('FREE', 'PRO');
-  end if;
-end$$;
+-- Create ENUM for Plans
+create type public.plan_type as enum ('FREE', 'PRO');
 
 -- Create Users table
 create table public.users (
