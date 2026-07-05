@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { CreateProjectButton } from './CreateProjectButton';
 import { DeleteProjectButton } from './DeleteProjectButton';
+import { AccountMenu } from './AccountMenu';
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -13,6 +14,15 @@ export default async function DashboardPage() {
     redirect('/login');
   }
 
+  // Fetch profile plan
+  const { data: profile } = await supabase
+    .from('users')
+    .select('plan')
+    .eq('id', user.id)
+    .single();
+
+  const plan = profile?.plan || 'FREE';
+
   // Fetch user projects
   const { data: projects } = await supabase
     .from('projects')
@@ -22,19 +32,12 @@ export default async function DashboardPage() {
   return (
     <div className="min-h-screen bg-[#070709] text-white p-8 font-sans">
       <div className="max-w-6xl mx-auto">
-        <header className="flex justify-between items-center mb-12">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>
             <h1 className="text-3xl font-black tracking-wider text-zinc-100 uppercase">LudoForge</h1>
             <p className="text-sm text-zinc-400 mt-1">Tus proyectos de diseño</p>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-3 bg-[#18181f] px-4 py-2 rounded-full border border-[#222228]">
-              <div className="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold">
-                {user.email?.charAt(0).toUpperCase()}
-              </div>
-              <span className="text-sm font-medium">{user.email}</span>
-            </div>
-          </div>
+          <AccountMenu email={user.email || ''} plan={plan} />
         </header>
 
         <main>

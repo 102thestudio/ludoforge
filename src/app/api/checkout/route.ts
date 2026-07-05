@@ -26,7 +26,7 @@ export async function POST(request: Request) {
       mode: 'subscription',
       customer_email: user.email,
       success_url: `${origin}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/pricing`,
+      cancel_url: `${origin}/dashboard`,
       metadata: {
         userId: user.id, // Keep track of the user ID to associate the webhook event
       },
