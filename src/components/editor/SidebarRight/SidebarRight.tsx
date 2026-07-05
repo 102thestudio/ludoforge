@@ -17,6 +17,18 @@ export function SidebarRight() {
   const tpl = GAME_TEMPLATES[templateId] || GAME_TEMPLATES[Object.keys(GAME_TEMPLATES)[0]];
   const activeTheme = THEMES[themeId] || THEMES.fantasy;
 
+  const handlePrint = () => {
+    const gameData = {
+      items,
+      templateId,
+      cover,
+      rules,
+      themeState: { themeId, themeOverrides, backStyle, backColor, backDesign, showCropMarks, showBleed }
+    };
+    sessionStorage.setItem('ludoforge_print_data', JSON.stringify(gameData));
+    window.open('/print', '_blank');
+  };
+
   const handleSocialExport = async () => {
     const pageEl = document.querySelector('.page') as HTMLElement;
     if (!pageEl) {
@@ -482,7 +494,7 @@ export function SidebarRight() {
           {/* Exportar */}
           <div className="border-t border-[#222228] pt-4 mt-2 flex flex-col gap-2">
             <button
-              onClick={() => window.print()}
+              onClick={handlePrint}
               className="w-full py-3 px-4 bg-gradient-to-r from-[#4f46e5] to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white rounded-xl font-bold text-sm transition-all duration-200 shadow-md shadow-[#4f46e5]/10 flex items-center justify-center gap-2 cursor-pointer"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/><rect x="6" y="2" width="12" height="6"/></svg>
