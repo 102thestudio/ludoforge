@@ -275,6 +275,10 @@ function CardBack({ card, style, theme, templateId, themeState }: { card: GameIt
 
   const design = themeState.backDesign || 'classic';
 
+  // Get the game name from the template for the card back label
+  const tpl = GAME_TEMPLATES[templateId] || GAME_TEMPLATES[Object.keys(GAME_TEMPLATES)[0]];
+  const gameName = tpl?.name || templateId || 'LudoForge';
+
   return (
     <div 
       className={`card ${card.type === 'question' ? 'card-back-question' : 'card-back-answer'}`} 
@@ -290,7 +294,7 @@ function CardBack({ card, style, theme, templateId, themeState }: { card: GameIt
       }}
     >
       {design !== 'empty' && (
-        <div style={{ fontSize: '14pt', fontWeight: 'bold' }}>
+        <div style={{ fontSize: '14pt', fontWeight: 'bold', textAlign: 'center', padding: '0.3cm' }}>
           {templateId === 'fiasco' ? (
             <>
               {design === 'classic' && <div>{card.type === 'question' ? '▲' : '★'}</div>}
@@ -300,13 +304,21 @@ function CardBack({ card, style, theme, templateId, themeState }: { card: GameIt
               {design === 'classic' && <div>{card.type === 'question' ? '▼' : '★'}</div>}
             </>
           ) : (
-            <span>BATTLE</span>
+            <>
+              {design === 'classic' && (
+                <div style={{ fontSize: '20pt', marginBottom: '6px', opacity: 0.7 }}>🎲</div>
+              )}
+              <div style={{ fontSize: '11pt', textTransform: 'uppercase', letterSpacing: '2px', lineHeight: 1.3 }}>
+                {gameName}
+              </div>
+            </>
           )}
         </div>
       )}
     </div>
   );
 }
+
 
 export function CoverRenderer({ data }: { data: any }) {
   return (
