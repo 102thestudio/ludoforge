@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation';
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [acceptPolicies, setAcceptPolicies] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -27,6 +29,35 @@ export default function LoginPage() {
     }
   }, []);
 
+  const getPasswordStrength = (pass: string) => {
+    if (!pass) return 0;
+    let score = 0;
+    if (pass.length >= 6) score += 1;
+    if (/[A-Z]/.test(pass)) score += 1;
+    if (/[0-9]/.test(pass)) score += 1;
+    if (/[^A-Za-z0-9]/.test(pass)) score += 1;
+    return score;
+  };
+
+  const passwordStrength = getPasswordStrength(password);
+
+  const getStrengthLabel = (strength: number) => {
+    switch (strength) {
+      case 1:
+        return { text: 'Insegura (mínimo 6 caracteres)', color: 'bg-red-500', textColor: 'text-red-400' };
+      case 2:
+        return { text: 'Normal (añade mayúsculas o números)', color: 'bg-amber-500', textColor: 'text-amber-400' };
+      case 3:
+        return { text: 'Segura (bastante buena)', color: 'bg-yellow-500', textColor: 'text-yellow-400' };
+      case 4:
+        return { text: '¡Nivel Dios (indescifrable!)', color: 'bg-emerald-500', textColor: 'text-emerald-400' };
+      default:
+        return { text: 'Demasiado corta', color: 'bg-zinc-800', textColor: 'text-zinc-600' };
+    }
+  };
+
+  const strengthDetails = getStrengthLabel(passwordStrength);
+
   const handlePasswordAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -40,6 +71,18 @@ export default function LoginPage() {
     }
 
     if (isSignUp) {
+      if (password !== confirmPassword) {
+        setError('Las contraseñas no coinciden.');
+        setIsLoading(false);
+        return;
+      }
+
+      if (!acceptPolicies) {
+        setError('Debes aceptar nuestra (divertida) política de privacidad.');
+        setIsLoading(false);
+        return;
+      }
+
       // Registration Flow
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -49,13 +92,14 @@ export default function LoginPage() {
       if (error) {
         setError(error.message);
       } else if (data.session) {
-        // Logged in immediately (Confirm email is disabled)
         router.push('/dashboard');
         router.refresh();
       } else {
         setMessage('¡Cuenta creada con éxito! Ya puedes iniciar sesión.');
         setIsSignUp(false);
         setPassword('');
+        setConfirmPassword('');
+        setAcceptPolicies(false);
       }
     } else {
       // Login Flow
@@ -106,7 +150,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-screen bg-[#070709] text-white flex items-center justify-center relative overflow-hidden font-sans">
+    <div className="min-h-screen w-screen bg-[#070709] text-white flex items-center justify-center relative overflow-hidden font-sans py-8">
       {/* Background gradients */}
       <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-[#4f46e5]/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none" />
@@ -184,7 +228,55 @@ export default function LoginPage() {
                     placeholder="••••••••"
                     className="w-full p-3 bg-[#18181f] text-zinc-100 border border-[#222228] rounded-xl text-sm focus:outline-none focus:border-[#4f46e5]/60 transition-colors"
                   />
+                  
+                  {/* Password Strength Indicator */}
+                  {isSignUp && password.length > 0 && (
+                    <div className="mt-2">
+                      <div className="flex justify-between items-center text-[10px] mb-1">
+                        <span className="text-zinc-500">Fuerza de la contraseña:</span>
+                        <span className={`font-semibold ${strengthDetails.textColor}`}>
+                          {strengthDetails.text}
+                        </span>
+                      </div>
+                      <div className="h-1 w-full bg-zinc-800 rounded-full overflow-hidden flex gap-0.5">
+                        <div className={`h-full flex-1 transition-all duration-300 ${passwordStrength >= 1 ? strengthDetails.color : 'bg-transparent'}`} />
+                        <div className={`h-full flex-1 transition-all duration-300 ${passwordStrength >= 2 ? strengthDetails.color : 'bg-transparent'}`} />
+                        <div className={`h-full flex-1 transition-all duration-300 ${passwordStrength >= 3 ? strengthDetails.color : 'bg-transparent'}`} />
+                        <div className={`h-full flex-1 transition-all duration-300 ${passwordStrength >= 4 ? strengthDetails.color : 'bg-transparent'}`} />
+                      </div>
+                    </div>
+                  )}
                 </div>
+
+                {isSignUp && (
+                  <>
+                    <div>
+                      <label className="text-xs text-zinc-400 block mb-1.5 font-semibold">Confirmar Contraseña</label>
+                      <input
+                        type="password"
+                        required
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder="••••••••"
+                        className="w-full p-3 bg-[#18181f] text-zinc-100 border border-[#222228] rounded-xl text-sm focus:outline-none focus:border-[#4f46e5]/60 transition-colors"
+                      />
+                    </div>
+
+                    <div className="flex items-start gap-2.5 mt-1 select-none">
+                      <input
+                        id="parody-privacy"
+                        type="checkbox"
+                        required
+                        checked={acceptPolicies}
+                        onChange={(e) => setAcceptPolicies(e.target.checked)}
+                        className="mt-1 h-3.5 w-3.5 rounded border-[#222228] bg-[#18181f] text-[#4f46e5] focus:ring-0 focus:ring-offset-0 cursor-pointer accent-[#4f46e5]"
+                      />
+                      <label htmlFor="parody-privacy" className="text-[10px] text-zinc-500 leading-normal cursor-pointer hover:text-zinc-400 transition-colors">
+                        Acepto las políticas de privacidad. Entiendo que LudoForge nunca venderá mis datos a megacorporaciones malvadas ni extraterrestres, y prometo no vender mi alma al usar la herramienta.
+                      </label>
+                    </div>
+                  </>
+                )}
 
                 {error && (
                   <div className="text-red-400 text-xs bg-red-950/20 border border-red-950/40 p-3 rounded-lg">
