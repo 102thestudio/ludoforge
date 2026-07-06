@@ -3,19 +3,19 @@ import { MetadataRoute } from 'next';
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
-      url: 'https://ludoforge-saas.vercel.app',
+      url: 'https://ludoforge.vercel.app',
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 1,
     },
     {
-      url: 'https://ludoforge-saas.vercel.app/login',
+      url: 'https://ludoforge.vercel.app/login',
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: 'https://ludoforge-saas.vercel.app/editor',
+      url: 'https://ludoforge.vercel.app/editor',
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.5,

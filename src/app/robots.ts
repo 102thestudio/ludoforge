@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: [],
     },
-    sitemap: 'https://ludoforge-saas.vercel.app/sitemap.xml',
+    sitemap: 'https://ludoforge.vercel.app/sitemap.xml',
   };
 }

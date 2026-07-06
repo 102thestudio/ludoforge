@@ -21,11 +21,11 @@ export const metadata: Metadata = {
   keywords: ["juegos de mesa", "print and play", "creador de cartas", "monopoly personalizado", "fiasco de gente", "diseñar cartas", "ludo forge", "juegos para imprimir"],
   authors: [{ name: "Josema & Co." }],
   creator: "LudoForge Team",
-  metadataBase: new URL("https://ludoforge-saas.vercel.app"),
+  metadataBase: new URL("https://ludoforge.vercel.app"),
   openGraph: {
     type: "website",
     locale: "es_ES",
-    url: "https://ludoforge-saas.vercel.app",
+    url: "https://ludoforge.vercel.app",
     title: "LudoForge - Creador Universal de Juegos de Mesa",
     description: "Diseña, edita e imprime tus propios juegos de mesa y cartas listos para jugar en minutos.",
     siteName: "LudoForge"
