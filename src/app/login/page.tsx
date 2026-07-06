@@ -6,13 +6,13 @@ import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isSignUp, setIsSignUp] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [showBypass, setShowBypass] = useState(false);
   const [bypassCode, setBypassCode] = useState('');
-  const [showOtpInput, setShowOtpInput] = useState(false);
-  const [otpCode, setOtpCode] = useState('');
 
   const supabase = createClient();
   const router = useRouter();
@@ -27,44 +27,53 @@ export default function LoginPage() {
     }
   }, []);
 
-  const handleEmailLogin = async (e: React.FormEvent) => {
+  const handlePasswordAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
     setMessage('');
 
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: `${location.origin}/auth/callback`,
-      },
-    });
-
-    if (error) {
-      setError(error.message);
-    } else {
-      setMessage('¡Revisa tu correo! Te hemos enviado un código y un enlace de acceso.');
-      setShowOtpInput(true);
+    if (password.length < 6) {
+      setError('La contraseña debe tener al menos 6 caracteres.');
+      setIsLoading(false);
+      return;
     }
-    setIsLoading(false);
-  };
 
-  const handleOtpVerification = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
+    if (isSignUp) {
+      // Registration Flow
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
 
-    const { error } = await supabase.auth.verifyOtp({
-      email,
-      token: otpCode,
-      type: 'email',
-    });
-
-    if (error) {
-      setError('Código de verificación inválido o caducado. Vuelve a intentarlo.');
+      if (error) {
+        setError(error.message);
+      } else if (data.session) {
+        // Logged in immediately (Confirm email is disabled)
+        router.push('/dashboard');
+        router.refresh();
+      } else {
+        setMessage('¡Cuenta creada con éxito! Ya puedes iniciar sesión.');
+        setIsSignUp(false);
+        setPassword('');
+      }
     } else {
-      router.push('/dashboard');
-      router.refresh();
+      // Login Flow
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        if (error.message === 'Invalid login credentials') {
+          setError('Correo o contraseña incorrectos.');
+        } else {
+          setError(error.message);
+        }
+      } else {
+        router.push('/dashboard');
+        router.refresh();
+      }
     }
     setIsLoading(false);
   };
@@ -74,7 +83,6 @@ export default function LoginPage() {
     setIsLoading(true);
     setError('');
 
-    // Bypass only works with the correct secret code
     const BYPASS_CODE = process.env.NEXT_PUBLIC_DEV_BYPASS_CODE || 'ludo-dev-2025';
 
     if (bypassCode !== BYPASS_CODE) {
@@ -128,126 +136,89 @@ export default function LoginPage() {
 
           {!showBypass ? (
             <>
-              {showOtpInput ? (
-                <>
-                  <h2 className="text-xl font-bold text-zinc-100 mb-2 text-center">Introduce tu código</h2>
-                  <p className="text-xs text-zinc-500 text-center mb-6">Hemos enviado un código de acceso de 6 dígitos a su correo.</p>
+              {/* Tab Selector */}
+              <div className="flex bg-[#18181f] p-1 rounded-xl mb-6 border border-[#222228]">
+                <button
+                  type="button"
+                  onClick={() => { setIsSignUp(false); setError(''); setMessage(''); }}
+                  className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all cursor-pointer ${!isSignUp ? 'bg-[#4f46e5] text-white shadow' : 'text-zinc-400 hover:text-zinc-200'}`}
+                >
+                  Iniciar Sesión
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setIsSignUp(true); setError(''); setMessage(''); }}
+                  className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all cursor-pointer ${isSignUp ? 'bg-[#4f46e5] text-white shadow' : 'text-zinc-400 hover:text-zinc-200'}`}
+                >
+                  Crear Cuenta
+                </button>
+              </div>
 
-                  <form onSubmit={handleOtpVerification} className="flex flex-col gap-4">
-                    <div>
-                      <label className="text-xs text-zinc-400 block mb-1.5 font-semibold text-center w-full">Código de Verificación</label>
-                      <input
-                        type="text"
-                        required
-                        maxLength={6}
-                        value={otpCode}
-                        onChange={(e) => setOtpCode(e.target.value)}
-                        placeholder="123456"
-                        className="w-full p-3 bg-[#18181f] text-zinc-100 border border-[#222228] rounded-xl text-sm focus:outline-none focus:border-[#4f46e5]/60 transition-colors text-center tracking-[8px] font-bold text-lg"
-                      />
-                    </div>
+              <h2 className="text-xl font-bold text-zinc-100 mb-2 text-center">
+                {isSignUp ? 'Crea tu cuenta' : '¡Te damos la bienvenida!'}
+              </h2>
+              <p className="text-xs text-zinc-500 text-center mb-6">
+                {isSignUp ? 'Completa los datos para empezar a diseñar.' : 'Introduce tus credenciales para acceder.'}
+              </p>
 
-                    {error && (
-                      <div className="text-red-400 text-xs bg-red-950/20 border border-red-950/40 p-3 rounded-lg">
-                        {error}
-                      </div>
-                    )}
-                    {message && (
-                      <div className="text-emerald-400 text-xs bg-emerald-950/20 border border-emerald-950/40 p-3 rounded-lg flex items-start gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        {message}
-                      </div>
-                    )}
+              <form onSubmit={handlePasswordAuth} className="flex flex-col gap-4">
+                <div>
+                  <label className="text-xs text-zinc-400 block mb-1.5 font-semibold">Correo Electrónico</label>
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="ejemplo@ludoforge.com"
+                    className="w-full p-3 bg-[#18181f] text-zinc-100 border border-[#222228] rounded-xl text-sm focus:outline-none focus:border-[#4f46e5]/60 transition-colors"
+                  />
+                </div>
 
-                    <button
-                      type="submit"
-                      disabled={isLoading}
-                      className="w-full py-3 mt-1 bg-gradient-to-r from-[#4f46e5] to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-md shadow-[#4f46e5]/10 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-                    >
-                      {isLoading ? (
-                        <>
-                          <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                          </svg>
-                          <span>Verificando...</span>
-                        </>
-                      ) : (
-                        <>
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                          <span>Verificar y entrar</span>
-                        </>
-                      )}
-                    </button>
-                  </form>
+                <div>
+                  <label className="text-xs text-zinc-400 block mb-1.5 font-semibold">Contraseña</label>
+                  <input
+                    type="password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full p-3 bg-[#18181f] text-zinc-100 border border-[#222228] rounded-xl text-sm focus:outline-none focus:border-[#4f46e5]/60 transition-colors"
+                  />
+                </div>
 
-                  <button
-                    onClick={() => {
-                      setShowOtpInput(false);
-                      setMessage('');
-                      setError('');
-                    }}
-                    className="block mx-auto mt-4 text-[10px] text-zinc-500 hover:text-zinc-300 transition-colors cursor-pointer"
-                  >
-                    Volver a introducir correo
-                  </button>
-                </>
-              ) : (
-                <>
-                  <h2 className="text-xl font-bold text-zinc-100 mb-2 text-center">¡Te damos la bienvenida!</h2>
-                  <p className="text-xs text-zinc-500 text-center mb-6">Introduce tu correo y te enviamos un enlace de acceso instantáneo.</p>
+                {error && (
+                  <div className="text-red-400 text-xs bg-red-950/20 border border-red-950/40 p-3 rounded-lg">
+                    {error}
+                  </div>
+                )}
+                {message && (
+                  <div className="text-emerald-400 text-xs bg-emerald-950/20 border border-emerald-950/40 p-3 rounded-lg flex items-start gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    {message}
+                  </div>
+                )}
 
-                  <form onSubmit={handleEmailLogin} className="flex flex-col gap-4">
-                    <div>
-                      <label className="text-xs text-zinc-400 block mb-1.5 font-semibold">Correo Electrónico</label>
-                      <input
-                        type="email"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="ejemplo@ludoforge.com"
-                        className="w-full p-3 bg-[#18181f] text-zinc-100 border border-[#222228] rounded-xl text-sm focus:outline-none focus:border-[#4f46e5]/60 transition-colors"
-                      />
-                    </div>
-
-                    {error && (
-                      <div className="text-red-400 text-xs bg-red-950/20 border border-red-950/40 p-3 rounded-lg">
-                        {error}
-                      </div>
-                    )}
-                    {message && (
-                      <div className="text-emerald-400 text-xs bg-emerald-950/20 border border-emerald-950/40 p-3 rounded-lg flex items-start gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        {message}
-                      </div>
-                    )}
-
-                    <button
-                      type="submit"
-                      disabled={isLoading}
-                      className="w-full py-3 mt-1 bg-gradient-to-r from-[#4f46e5] to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-md shadow-[#4f46e5]/10 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-                    >
-                      {isLoading ? (
-                        <>
-                          <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                          </svg>
-                          <span>Enviando enlace...</span>
-                        </>
-                      ) : (
-                        <>
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                          <span>Enviar enlace mágico</span>
-                        </>
-                      )}
-                    </button>
-                  </form>
-                </>
-              )}
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full py-3 mt-1 bg-gradient-to-r from-[#4f46e5] to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-md shadow-[#4f46e5]/10 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                >
+                  {isLoading ? (
+                    <>
+                      <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      <span>Procesando...</span>
+                    </>
+                  ) : (
+                    <span>{isSignUp ? 'Registrarse y Entrar' : 'Iniciar Sesión'}</span>
+                  )}
+                </button>
+              </form>
 
               <p className="text-[10px] text-zinc-600 text-center mt-5 leading-relaxed">
-                Al continuar, aceptas nuestros Términos de Servicio. Sin contraseñas, sin complicaciones.
+                Al continuar, aceptas nuestros Términos de Servicio. Acceso seguro por contraseña.
               </p>
             </>
           ) : (
