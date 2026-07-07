@@ -289,7 +289,7 @@ export const GAME_TEMPLATES: Record<string, any> = {
           { id: "footer", type: "bar", position: "bottom", height: "13%", contains: ["rank", "suit"] }
         ],
         fields: [
-          { id: "rank", type: "select", label: "Valor", options: ["1","2","3","4","5","6","7","8","9","Sota","Caballo","Rey"] },
+          { id: "rank", type: "select", label: "Valor", options: ["1","2","3","4","5","6","7","8","9","10","11","12"] },
           { id: "suit", type: "select", label: "Palo", options: ["Oros","Copas","Espadas","Bastos"] },
           { id: "image", type: "image", label: "Ilustración" }
         ]

@@ -131,7 +131,7 @@ export const useGameStore = create<GameState>()(
             coverTitle = "Baraja Española Personalizada";
             rulesContent = "## Cómo Jugar\n1. La baraja española tiene 48 cartas divididas en 4 palos: Oros, Copas, Espadas y Bastos.\n2. Cada palo tiene 12 cartas: del 1 al 9, Sota, Caballo y Rey.\n3. Ideal para juegos como el chinchón, la brisca, el tute o la escoba.";
             const palosEsp = ["Oros","Copas","Espadas","Bastos"];
-            const valoresEsp = ["1","2","3","4","5","6","7","8","9","Sota","Caballo","Rey"];
+            const valoresEsp = ["1","2","3","4","5","6","7","8","9","10","11","12"];
             defaultItems = [];
             for (const p of palosEsp) {
               for (const v of valoresEsp) {
