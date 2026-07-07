@@ -74,6 +74,7 @@ function CardFront({ card, style, theme, templateId, isSelected, onClick }: { ca
 
   const rarity = card.rarity;
   const rarityStyle = rarity && theme.rarity?.[rarity] ? theme.rarity[rarity] : null;
+  const cardStyle = theme.effects.cardStyle || 'classic';
 
   let border = isSelected 
     ? `3px solid var(--color-oro)` 
@@ -86,6 +87,29 @@ function CardFront({ card, style, theme, templateId, isSelected, onClick }: { ca
   if (!isSelected && rarityStyle && rarityStyle.glow && rarityStyle.glow !== 'none') {
     boxShadow = rarityStyle.glow;
     border = `${theme.effects.borderWidth} ${theme.effects.borderStyle} ${rarityStyle.border}`;
+  }
+
+  // Render themed card based on cardStyle
+  if (cardStyle === 'fullBleed' && card.image) {
+    return <CardFullBleed card={card} style={style} theme={theme} border={border} boxShadow={boxShadow} isSelected={isSelected} onClick={onClick} itemTpl={itemTpl} />;
+  }
+  if (cardStyle === 'neonFrame' && card.image) {
+    return <CardNeonFrame card={card} theme={theme} border={border} boxShadow={boxShadow} isSelected={isSelected} onClick={onClick} itemTpl={itemTpl} />;
+  }
+  if (cardStyle === 'minimalClean') {
+    return <CardMinimalClean card={card} style={style} theme={theme} border={border} boxShadow={boxShadow} isSelected={isSelected} onClick={onClick} itemTpl={itemTpl} />;
+  }
+  if (cardStyle === 'boldNeon') {
+    return <CardBoldNeon card={card} style={style} theme={theme} border={border} boxShadow={boxShadow} isSelected={isSelected} onClick={onClick} itemTpl={itemTpl} />;
+  }
+  if (cardStyle === 'softRounded' && card.image) {
+    return <CardSoftRounded card={card} theme={theme} border={border} boxShadow={boxShadow} isSelected={isSelected} onClick={onClick} itemTpl={itemTpl} />;
+  }
+  if (cardStyle === 'pastelFramed') {
+    return <CardPastelFramed card={card} style={style} theme={theme} border={border} boxShadow={boxShadow} isSelected={isSelected} onClick={onClick} itemTpl={itemTpl} />;
+  }
+  if (cardStyle === 'organicFull' && card.image) {
+    return <CardOrganicFull card={card} theme={theme} border={border} boxShadow={boxShadow} isSelected={isSelected} onClick={onClick} itemTpl={itemTpl} />;
   }
 
   const zones = itemTpl.zones || [];
@@ -250,6 +274,282 @@ function CardFront({ card, style, theme, templateId, isSelected, onClick }: { ca
           {card.cornerTag !== undefined ? card.cornerTag : itemTpl.name}
         </div>
       )}
+    </div>
+  );
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   CARD STYLE VARIANTS
+   ═══════════════════════════════════════════════════════════════════ */
+
+function CardFullBleed({ card, style, theme, border, boxShadow, isSelected, onClick, itemTpl }: any) {
+  return (
+    <div className={`card ${isSelected ? 'editing' : ''}`} onClick={onClick} style={{
+      background: '#000', color: '#fff', border, borderRadius: theme.effects.borderRadius,
+      boxShadow, position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', cursor: 'pointer'
+    }}>
+      {/* Full image */}
+      <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
+        <img src={card.image} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
+      </div>
+      {/* Gradient overlay at bottom */}
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '55%', background: 'linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.6) 60%, transparent 100%)', zIndex: 1 }} />
+      {/* Title bar on top */}
+      {card.title && (
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, padding: '0.3cm 0.3cm 0.2cm', background: 'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, transparent 100%)', zIndex: 2, fontFamily: theme.fonts.title, fontWeight: 800, fontSize: '10pt', textTransform: 'uppercase', letterSpacing: '1px', textShadow: '0 1px 4px rgba(0,0,0,0.8)' }}>
+          {card.title}
+        </div>
+      )}
+      {/* Text at bottom */}
+      {card.text && (
+        <div style={{ position: 'absolute', bottom: '0.2cm', left: '0.3cm', right: '0.3cm', zIndex: 2, fontFamily: theme.fonts.body, fontSize: '7pt', lineHeight: 1.3, opacity: 0.9 }}>
+          {card.text}
+        </div>
+      )}
+      {/* Category icon */}
+      {style.icon && (
+        <div style={{ position: 'absolute', top: '0.15cm', right: '0.15cm', fontSize: '10pt', opacity: 0.85, zIndex: 2, textShadow: '0 1px 4px rgba(0,0,0,0.8)' }}>{style.icon}</div>
+      )}
+      {/* Stats */}
+      {card.hp !== undefined && (
+        <div style={{ position: 'absolute', bottom: '0.5cm', right: '0.3cm', zIndex: 2, display: 'flex', gap: '4px' }}>
+          {card.hp !== undefined && <span style={{ background: 'rgba(0,0,0,0.6)', padding: '2px 6px', borderRadius: '4px', fontSize: '7pt', fontFamily: theme.fonts.stats }}>❤️ {card.hp}</span>}
+          {card.attack !== undefined && <span style={{ background: 'rgba(0,0,0,0.6)', padding: '2px 6px', borderRadius: '4px', fontSize: '7pt', fontFamily: theme.fonts.stats }}>⚔️ {card.attack}</span>}
+        </div>
+      )}
+      {/* Corner tag */}
+      {itemTpl.name && (
+        <div style={{ position: 'absolute', bottom: '0.15cm', left: '0.15cm', fontFamily: theme.fonts.stats, fontSize: '5pt', opacity: 0.5, zIndex: 2, textTransform: 'uppercase', letterSpacing: '1px' }}>{itemTpl.name}</div>
+      )}
+    </div>
+  );
+}
+
+function CardNeonFrame({ card, theme, border, boxShadow, isSelected, onClick, itemTpl }: any) {
+  return (
+    <div className={`card ${isSelected ? 'editing' : ''}`} onClick={onClick} style={{
+      background: 'linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 100%)', color: '#e0e0e0',
+      border: `${theme.effects.borderWidth} solid ${theme.effects.glowColor || '#00f5d4'}`,
+      borderRadius: '2px', boxShadow: `${boxShadow}, inset 0 0 30px rgba(0,0,0,0.6)`,
+      position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', cursor: 'pointer'
+    }}>
+      {/* Scanlines overlay */}
+      <div style={{ position: 'absolute', inset: 0, background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,245,212,0.03) 2px, rgba(0,245,212,0.03) 4px)', zIndex: 3, pointerEvents: 'none' }} />
+      {/* Image centered */}
+      {card.image ? (
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.3cm', zIndex: 1 }}>
+          <img src={card.image} style={{ width: '100%', height: '100%', objectFit: 'cover', border: `1px solid ${theme.effects.glowColor || '#00f5d4'}`, borderRadius: '2px', boxShadow: `0 0 12px ${theme.effects.glowColor || '#00f5d4'}40` }} alt="" />
+        </div>
+      ) : (
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '36pt', color: theme.effects.glowColor || '#00f5d4', opacity: 0.25, zIndex: 1 }}>⚡</div>
+      )}
+      {/* Title bar at top */}
+      {card.title && (
+        <div style={{ padding: '0.15cm 0.3cm', fontFamily: theme.fonts.title, fontWeight: 800, fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '2px', color: theme.effects.glowColor || '#00f5d4', textAlign: 'center', borderTop: `1px solid ${theme.effects.glowColor || '#00f5d4'}40`, zIndex: 2 }}>
+          {card.title}
+        </div>
+      )}
+      {/* Stats row */}
+      {(card.hp !== undefined || card.attack !== undefined) && (
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', padding: '0.1cm 0.3cm', zIndex: 2 }}>
+          {card.hp !== undefined && <span style={{ fontFamily: theme.fonts.stats, fontSize: '7pt', color: theme.effects.glowColor || '#00f5d4' }}>❤️ {card.hp}</span>}
+          {card.attack !== undefined && <span style={{ fontFamily: theme.fonts.stats, fontSize: '7pt', color: theme.effects.glowColor || '#00f5d4' }}>⚔️ {card.attack}</span>}
+        </div>
+      )}
+      {/* Corner tag */}
+      <div style={{ position: 'absolute', top: '0.1cm', right: '0.15cm', fontFamily: theme.fonts.stats, fontSize: '5pt', opacity: 0.4, zIndex: 2, textTransform: 'uppercase', letterSpacing: '1px', color: theme.effects.glowColor || '#00f5d4' }}>{itemTpl.name}</div>
+    </div>
+  );
+}
+
+function CardMinimalClean({ card, style, theme, border, boxShadow, isSelected, onClick, itemTpl }: any) {
+  return (
+    <div className={`card ${isSelected ? 'editing' : ''}`} onClick={onClick} style={{
+      background: '#ffffff', color: '#212121', border: `1px solid #e0e0e0`,
+      borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+      padding: '0.4cm', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '6px', cursor: 'pointer'
+    }}>
+      {/* Top accent line */}
+      <div style={{ position: 'absolute', top: 0, left: '15%', right: '15%', height: '3px', background: style.borderColor, borderRadius: '0 0 4px 4px' }} />
+      {/* Title */}
+      {card.title && (
+        <div style={{ fontFamily: theme.fonts.title, fontWeight: 700, fontSize: '9pt', color: '#212121', marginTop: '4px', textAlign: 'center' }}>{card.title}</div>
+      )}
+      {/* Image centered, smaller */}
+      {card.image && (
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', margin: '0 0.2cm' }}>
+          <img src={card.image} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px' }} alt="" />
+        </div>
+      )}
+      {/* Text */}
+      {card.text && (
+        <div style={{ fontFamily: theme.fonts.body, fontSize: '6.5pt', color: '#555', textAlign: 'center', lineHeight: 1.3 }}>{card.text}</div>
+      )}
+      {/* Stats subtle */}
+      {(card.hp !== undefined || card.attack !== undefined) && (
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', fontSize: '6.5pt', fontFamily: theme.fonts.stats, color: '#757575' }}>
+          {card.hp !== undefined && <span>HP {card.hp}</span>}
+          {card.attack !== undefined && <span>ATK {card.attack}</span>}
+        </div>
+      )}
+      {/* Corner tag */}
+      <div style={{ position: 'absolute', bottom: '0.1cm', right: '0.15cm', fontFamily: theme.fonts.ui, fontSize: '5pt', color: '#bbb', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{itemTpl.name}</div>
+    </div>
+  );
+}
+
+function CardBoldNeon({ card, style, theme, border, boxShadow, isSelected, onClick, itemTpl }: any) {
+  return (
+    <div className={`card ${isSelected ? 'editing' : ''}`} onClick={onClick} style={{
+      background: 'linear-gradient(160deg, #0f3460 0%, #1a1a2e 100%)', color: '#eaeaea',
+      border: `3px double ${theme.effects.innerBorder || '#e94560'}`,
+      borderRadius: '4px', boxShadow: `0 0 25px ${theme.effects.glowColor || '#e94560'}40, inset 0 0 25px rgba(0,0,0,0.5)`,
+      padding: '0.3cm', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '4px', cursor: 'pointer'
+    }}>
+      {/* Title bar */}
+      {card.title && (
+        <div style={{ fontFamily: theme.fonts.title, fontWeight: 900, fontSize: '7pt', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'center', padding: '0.1cm 0', borderBottom: `2px solid ${theme.effects.innerBorder || '#e94560'}`, color: theme.effects.innerBorder || '#e94560' }}>
+          {card.title}
+        </div>
+      )}
+      {/* Image */}
+      {card.image ? (
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', border: `1px solid ${theme.effects.innerBorder || '#e94560'}40`, borderRadius: '2px', margin: '2px 0' }}>
+          <img src={card.image} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
+        </div>
+      ) : (
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '32pt', color: theme.effects.innerBorder || '#e94560', opacity: 0.2 }}>🃏</div>
+      )}
+      {/* Text */}
+      {card.text && (
+        <div style={{ fontFamily: theme.fonts.body, fontSize: '6pt', textAlign: 'center', opacity: 0.8, lineHeight: 1.3, padding: '0 2px' }}>{card.text}</div>
+      )}
+      {/* Stats */}
+      {(card.hp !== undefined || card.attack !== undefined) && (
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', fontSize: '6.5pt', fontFamily: theme.fonts.stats }}>
+          {card.hp !== undefined && <span style={{ color: '#ff5252' }}>❤️ {card.hp}</span>}
+          {card.attack !== undefined && <span style={{ color: '#ff5252' }}>⚔️ {card.attack}</span>}
+        </div>
+      )}
+      {/* Corner tag */}
+      <div style={{ position: 'absolute', bottom: '0.1cm', left: '0.15cm', fontFamily: theme.fonts.stats, fontSize: '4.5pt', opacity: 0.35, textTransform: 'uppercase', letterSpacing: '1px' }}>{itemTpl.name}</div>
+    </div>
+  );
+}
+
+function CardSoftRounded({ card, theme, border, boxShadow, isSelected, onClick, itemTpl }: any) {
+  return (
+    <div className={`card ${isSelected ? 'editing' : ''}`} onClick={onClick} style={{
+      background: 'linear-gradient(180deg, #0a192f 0%, #112240 100%)', color: '#ccd6f6',
+      border: '1px solid rgba(100,255,218,0.15)', borderRadius: '16px',
+      boxShadow: `${boxShadow}, 0 2px 8px rgba(100,255,218,0.08)`,
+      position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', cursor: 'pointer'
+    }}>
+      {/* Image top with gradient overlay */}
+      {card.image ? (
+        <div style={{ position: 'relative', height: '60%', overflow: 'hidden', borderRadius: '16px 16px 0 0' }}>
+          <img src={card.image} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 40%, rgba(10,25,47,0.95) 100%)' }} />
+        </div>
+      ) : (
+        <div style={{ height: '40%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '36pt', color: '#64ffda', opacity: 0.15 }}>🌊</div>
+      )}
+      {/* Content at bottom */}
+      <div style={{ padding: '0.2cm 0.35cm', display: 'flex', flexDirection: 'column', gap: '3px', flex: 1 }}>
+        {card.title && (
+          <div style={{ fontFamily: theme.fonts.title, fontWeight: 700, fontSize: '9pt', color: '#ffffff' }}>{card.title}</div>
+        )}
+        {card.text && (
+          <div style={{ fontFamily: theme.fonts.body, fontSize: '6pt', color: '#8892b0', lineHeight: 1.3 }}>{card.text}</div>
+        )}
+        {(card.hp !== undefined || card.attack !== undefined) && (
+          <div style={{ display: 'flex', gap: '8px', fontSize: '6.5pt', fontFamily: theme.fonts.stats, color: '#64ffda', marginTop: 'auto' }}>
+            {card.hp !== undefined && <span>❤️ {card.hp}</span>}
+            {card.attack !== undefined && <span>⚔️ {card.attack}</span>}
+          </div>
+        )}
+      </div>
+      {/* Corner tag */}
+      <div style={{ position: 'absolute', top: '0.15cm', right: '0.2cm', fontFamily: theme.fonts.ui, fontSize: '5pt', color: '#64ffda', opacity: 0.4, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{itemTpl.name}</div>
+    </div>
+  );
+}
+
+function CardPastelFramed({ card, style, theme, border, boxShadow, isSelected, onClick, itemTpl }: any) {
+  return (
+    <div className={`card ${isSelected ? 'editing' : ''}`} onClick={onClick} style={{
+      background: '#fef9f3', color: '#4a4a4a',
+      border: `2px solid ${theme.effects.outerBorder || '#f0d9c0'}`,
+      borderRadius: '20px', boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+      position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', cursor: 'pointer'
+    }}>
+      {/* Inner border */}
+      <div style={{ position: 'absolute', inset: '4px', border: `1.5px solid ${theme.effects.innerBorder || '#f8bbd0'}`, borderRadius: '16px', pointerEvents: 'none', zIndex: 2 }} />
+      {/* Title */}
+      {card.title && (
+        <div style={{ fontFamily: theme.fonts.title, fontWeight: 700, fontSize: '9pt', color: '#880e4f', textAlign: 'center', padding: '0.3cm 0.3cm 0.1cm', zIndex: 1 }}>{card.title}</div>
+      )}
+      {/* Image centered */}
+      {card.image ? (
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.1cm 0.4cm', zIndex: 1 }}>
+          <img src={card.image} style={{ maxWidth: '90%', maxHeight: '100%', objectFit: 'contain', borderRadius: '12px', boxShadow: '0 2px 12px rgba(0,0,0,0.08)' }} alt="" />
+        </div>
+      ) : (
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '32pt', color: '#e74c8b', opacity: 0.15, zIndex: 1 }}>🎀</div>
+      )}
+      {/* Text */}
+      {card.text && (
+        <div style={{ fontFamily: theme.fonts.body, fontSize: '6.5pt', color: '#7a7a7a', textAlign: 'center', padding: '0 0.4cm', lineHeight: 1.3, zIndex: 1 }}>{card.text}</div>
+      )}
+      {/* Stats */}
+      {(card.hp !== undefined || card.attack !== undefined) && (
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', padding: '0.15cm', zIndex: 1 }}>
+          {card.hp !== undefined && <span style={{ fontSize: '6.5pt', fontFamily: theme.fonts.stats, color: '#e74c8b' }}>❤️ {card.hp}</span>}
+          {card.attack !== undefined && <span style={{ fontSize: '6.5pt', fontFamily: theme.fonts.stats, color: '#e74c8b' }}>⚔️ {card.attack}</span>}
+        </div>
+      )}
+      {/* Corner tag */}
+      <div style={{ position: 'absolute', bottom: '0.15cm', right: '0.25cm', fontFamily: theme.fonts.ui, fontSize: '5pt', color: '#d7ccc8', textTransform: 'uppercase', letterSpacing: '0.5px', zIndex: 2 }}>{itemTpl.name}</div>
+    </div>
+  );
+}
+
+function CardOrganicFull({ card, theme, border, boxShadow, isSelected, onClick, itemTpl }: any) {
+  return (
+    <div className={`card ${isSelected ? 'editing' : ''}`} onClick={onClick} style={{
+      background: 'linear-gradient(180deg, #1b2e1b 0%, #2d4a2d 100%)', color: '#e8f5e9',
+      border: `2px solid ${theme.effects.innerBorder || '#7cb342'}`,
+      borderRadius: '10px', boxShadow: `${boxShadow}, 0 0 0 1px rgba(76,175,80,0.2)`,
+      position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', cursor: 'pointer'
+    }}>
+      {/* Image fills top 65% */}
+      {card.image ? (
+        <div style={{ position: 'relative', height: '65%', overflow: 'hidden' }}>
+          <img src={card.image} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 30%, rgba(27,46,27,0.95) 100%)' }} />
+          {/* Title on image */}
+          {card.title && (
+            <div style={{ position: 'absolute', bottom: '0.2cm', left: '0.3cm', right: '0.3cm', fontFamily: theme.fonts.title, fontWeight: 800, fontSize: '9pt', color: '#ffffff', textShadow: '0 1px 4px rgba(0,0,0,0.6)', zIndex: 2 }}>{card.title}</div>
+          )}
+        </div>
+      ) : (
+        <div style={{ height: '45%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '40pt', color: '#7cb342', opacity: 0.15 }}>🌿</div>
+      )}
+      {/* Content at bottom */}
+      <div style={{ padding: '0.15cm 0.3cm', display: 'flex', flexDirection: 'column', gap: '3px', flex: 1 }}>
+        {card.text && (
+          <div style={{ fontFamily: theme.fonts.body, fontSize: '6pt', color: '#a5d6a7', lineHeight: 1.3 }}>{card.text}</div>
+        )}
+        {(card.hp !== undefined || card.attack !== undefined) && (
+          <div style={{ display: 'flex', gap: '8px', fontSize: '6.5pt', fontFamily: theme.fonts.stats, color: '#7cb342', marginTop: 'auto' }}>
+            {card.hp !== undefined && <span>❤️ {card.hp}</span>}
+            {card.attack !== undefined && <span>⚔️ {card.attack}</span>}
+          </div>
+        )}
+      </div>
+      {/* Corner tag */}
+      <div style={{ position: 'absolute', top: '0.15cm', right: '0.2cm', fontFamily: theme.fonts.ui, fontSize: '5pt', color: '#7cb342', opacity: 0.5, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{itemTpl.name}</div>
     </div>
   );
 }

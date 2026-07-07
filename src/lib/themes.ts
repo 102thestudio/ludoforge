@@ -3,7 +3,7 @@ export const THEMES: Record<string, any> = {
     name: "Fantasía Épica", preview: "🏰",
     colors: { primary: "#2C1810", secondary: "#F5E6D3", accent: "#D4AF37", text: "#1A1A1A", textLight: "#F5E6D3", border: "#8B7355", cardBack: "#1A1A1A" },
     fonts: { title: "'Cinzel', 'Arial Black', serif", body: "'Crimson Text', Georgia, serif", stats: "'Outfit', monospace", ui: "'Inter', sans-serif" },
-    effects: { borderRadius: "4px", borderWidth: "2px", borderStyle: "solid", shadow: "0 2px 8px rgba(0,0,0,0.3)", cardPadding: "0.4cm", pattern: "none" },
+    effects: { borderRadius: "6px", borderWidth: "2px", borderStyle: "solid", shadow: "0 4px 20px rgba(0,0,0,0.4)", cardPadding: "0.4cm", pattern: "none", cardStyle: "fullBleed", imageHeight: "65%", imagePosition: "top", textOverlay: true, doubleBorder: true, innerBorder: "#D4AF37", outerBorder: "#8B7355" },
     categories: {
       attack:   { background: "linear-gradient(160deg, #8B1A1A, #C0392B)", textColor: "#FFD700", icon: "⚔️", borderColor: "#FF4500" },
       defense:  { background: "linear-gradient(160deg, #1B5E20, #43A047)", textColor: "#E8F5E9", icon: "🛡️", borderColor: "#4CAF50" },
@@ -28,7 +28,7 @@ export const THEMES: Record<string, any> = {
     name: "Cyberpunk 2099", preview: "🌆",
     colors: { primary: "#0a0a0a", secondary: "#1a1a2e", accent: "#00f5d4", text: "#e0e0e0", textLight: "#ffffff", border: "#00f5d4", cardBack: "#0a0a0a" },
     fonts: { title: "'Orbitron', 'Outfit', monospace", body: "'Share Tech Mono', 'Inter', monospace", stats: "'Outfit', monospace", ui: "'Inter', sans-serif" },
-    effects: { borderRadius: "0px", borderWidth: "1px", borderStyle: "solid", shadow: "0 0 15px rgba(0,245,212,0.2), inset 0 0 30px rgba(0,0,0,0.5)", cardPadding: "0.4cm", pattern: "scanlines" },
+    effects: { borderRadius: "0px", borderWidth: "2px", borderStyle: "solid", shadow: "0 0 20px rgba(0,245,212,0.3), inset 0 0 40px rgba(0,0,0,0.6)", cardPadding: "0.4cm", pattern: "scanlines", cardStyle: "neonFrame", imageHeight: "55%", imagePosition: "center", textOverlay: false, glowColor: "#00f5d4", scanlines: true },
     categories: {
       attack:   { background: "linear-gradient(160deg, #b71c1c, #f44336)", textColor: "#fff", icon: "💥", borderColor: "#ff1744" },
       defense:  { background: "linear-gradient(160deg, #004d40, #00897b)", textColor: "#a7ffeb", icon: "🔒", borderColor: "#00f5d4" },
@@ -53,7 +53,7 @@ export const THEMES: Record<string, any> = {
     name: "Minimal Moderno", preview: "◻️",
     colors: { primary: "#ffffff", secondary: "#f5f5f5", accent: "#212121", text: "#212121", textLight: "#757575", border: "#e0e0e0", cardBack: "#212121" },
     fonts: { title: "'Outfit', 'Helvetica Neue', sans-serif", body: "'Inter', 'Helvetica Neue', sans-serif", stats: "'Inter', monospace", ui: "'Inter', sans-serif" },
-    effects: { borderRadius: "8px", borderWidth: "1px", borderStyle: "solid", shadow: "0 1px 3px rgba(0,0,0,0.08)", cardPadding: "0.5cm", pattern: "none" },
+    effects: { borderRadius: "12px", borderWidth: "1px", borderStyle: "solid", shadow: "0 2px 8px rgba(0,0,0,0.06)", cardPadding: "0.5cm", pattern: "none", cardStyle: "minimalClean", imageHeight: "40%", imagePosition: "center", textOverlay: false, cornerAccent: true },
     categories: {
       attack:   { background: "#FFEBEE", textColor: "#B71C1C", icon: "→", borderColor: "#EF9A9A" },
       defense:  { background: "#E8F5E9", textColor: "#1B5E20", icon: "○", borderColor: "#A5D6A7" },
@@ -78,7 +78,7 @@ export const THEMES: Record<string, any> = {
     name: "Retro Arcade", preview: "🕹️",
     colors: { primary: "#1a1a2e", secondary: "#16213e", accent: "#e94560", text: "#eaeaea", textLight: "#ffffff", border: "#e94560", cardBack: "#0f3460" },
     fonts: { title: "'Press Start 2P', 'Outfit', monospace", body: "'Inter', sans-serif", stats: "'Outfit', monospace", ui: "'Inter', sans-serif" },
-    effects: { borderRadius: "0px", borderWidth: "2px", borderStyle: "solid", shadow: "0 0 20px rgba(233,69,96,0.3), inset 0 0 20px rgba(0,0,0,0.4)", cardPadding: "0.4cm", pattern: "none" },
+    effects: { borderRadius: "4px", borderWidth: "3px", borderStyle: "double", shadow: "0 0 25px rgba(233,69,96,0.4), inset 0 0 25px rgba(0,0,0,0.5)", cardPadding: "0.4cm", pattern: "none", cardStyle: "boldNeon", imageHeight: "50%", imagePosition: "center", textOverlay: false, glowColor: "#e94560", innerBorder: "#e94560", outerBorder: "#0f3460" },
     categories: {
       attack:   { background: "linear-gradient(160deg, #b71c1c, #e53935)", textColor: "#ffcdd2", icon: "💥", borderColor: "#ff5252" },
       defense:  { background: "linear-gradient(160deg, #1b5e20, #43a047)", textColor: "#c8e6c9", icon: "🛡️", borderColor: "#66bb6a" },
@@ -103,7 +103,7 @@ export const THEMES: Record<string, any> = {
     name: "Océano Profundo", preview: "🌊",
     colors: { primary: "#0a192f", secondary: "#112240", accent: "#64ffda", text: "#ccd6f6", textLight: "#ffffff", border: "#233554", cardBack: "#0a192f" },
     fonts: { title: "'Outfit', 'Helvetica Neue', sans-serif", body: "'Inter', sans-serif", stats: "'Outfit', monospace", ui: "'Inter', sans-serif" },
-    effects: { borderRadius: "12px", borderWidth: "1px", borderStyle: "solid", shadow: "0 4px 20px rgba(0,0,0,0.3)", cardPadding: "0.4cm", pattern: "none" },
+    effects: { borderRadius: "16px", borderWidth: "1px", borderStyle: "solid", shadow: "0 8px 32px rgba(0,0,0,0.35), 0 2px 8px rgba(100,255,218,0.1)", cardPadding: "0.4cm", pattern: "none", cardStyle: "softRounded", imageHeight: "55%", imagePosition: "top", textOverlay: true, gradientOverlay: "linear-gradient(to bottom, transparent 40%, rgba(10,25,47,0.9) 100%)" },
     categories: {
       attack:   { background: "linear-gradient(160deg, #b71c1c, #d32f2f)", textColor: "#ffcdd2", icon: "⚔️", borderColor: "#ef5350" },
       defense:  { background: "linear-gradient(160deg, #004d40, #00897b)", textColor: "#b2dfdb", icon: "🛡️", borderColor: "#26a69a" },
@@ -128,7 +128,7 @@ export const THEMES: Record<string, any> = {
     name: "Pastel Suave", preview: "🎀",
     colors: { primary: "#fef9f3", secondary: "#fdf2e9", accent: "#e74c8b", text: "#4a4a4a", textLight: "#7a7a7a", border: "#f0d9c0", cardBack: "#f8e8d8" },
     fonts: { title: "'Outfit', 'Quicksand', sans-serif", body: "'Inter', 'Quicksand', sans-serif", stats: "'Inter', monospace", ui: "'Inter', sans-serif" },
-    effects: { borderRadius: "16px", borderWidth: "1.5px", borderStyle: "solid", shadow: "0 2px 12px rgba(0,0,0,0.06)", cardPadding: "0.5cm", pattern: "none" },
+    effects: { borderRadius: "20px", borderWidth: "2px", borderStyle: "solid", shadow: "0 4px 20px rgba(0,0,0,0.08)", cardPadding: "0.5cm", pattern: "none", cardStyle: "pastelFramed", imageHeight: "45%", imagePosition: "center", textOverlay: false, doubleBorder: true, innerBorder: "#f8bbd0", outerBorder: "#f0d9c0" },
     categories: {
       attack:   { background: "linear-gradient(160deg, #fce4ec, #f8bbd0)", textColor: "#880e4f", icon: "⚔️", borderColor: "#f48fb1" },
       defense:  { background: "linear-gradient(160deg, #e8f5e9, #c8e6c9)", textColor: "#1b5e20", icon: "🛡️", borderColor: "#a5d6a7" },
@@ -153,7 +153,7 @@ export const THEMES: Record<string, any> = {
     name: "Natura Viva", preview: "🌿",
     colors: { primary: "#1b2e1b", secondary: "#2d4a2d", accent: "#7cb342", text: "#e8f5e9", textLight: "#ffffff", border: "#4caf50", cardBack: "#1b2e1b" },
     fonts: { title: "'Outfit', 'Nunito', sans-serif", body: "'Inter', sans-serif", stats: "'Inter', monospace", ui: "'Inter', sans-serif" },
-    effects: { borderRadius: "10px", borderWidth: "1.5px", borderStyle: "solid", shadow: "0 3px 15px rgba(0,0,0,0.25)", cardPadding: "0.4cm", pattern: "none" },
+    effects: { borderRadius: "10px", borderWidth: "2px", borderStyle: "solid", shadow: "0 4px 16px rgba(0,0,0,0.3), 0 0 0 1px rgba(76,175,80,0.2)", cardPadding: "0.4cm", pattern: "none", cardStyle: "organicFull", imageHeight: "60%", imagePosition: "top", textOverlay: true, gradientOverlay: "linear-gradient(to bottom, transparent 30%, rgba(27,46,27,0.95) 100%)", innerBorder: "#7cb342" },
     categories: {
       attack:   { background: "linear-gradient(160deg, #b71c1c, #c62828)", textColor: "#ffcdd2", icon: "⚔️", borderColor: "#e53935" },
       defense:  { background: "linear-gradient(160deg, #1b5e20, #2e7d32)", textColor: "#c8e6c9", icon: "🛡️", borderColor: "#43a047" },
