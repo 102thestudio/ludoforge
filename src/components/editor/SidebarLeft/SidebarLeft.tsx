@@ -9,16 +9,17 @@ import { THEMES } from '@/lib/themes';
 
 export function SidebarLeft() {
   const { items, templateId, addItem, duplicateItem, deleteItem } = useGameStore();
-  const { selectedItemId, setSelectedItemId } = useUIStore();
+  const { selectedItemId, setSelectedItemId, closeSidebars } = useUIStore();
   const themeState = useThemeStore();
   const theme = THEMES[themeState.themeId] || THEMES.fantasy;
 
   const tpl = GAME_TEMPLATES[templateId] || GAME_TEMPLATES[Object.keys(GAME_TEMPLATES)[0]];
 
   return (
-    <aside className="w-80 h-full bg-[#111115] border-r border-[#222228] text-white flex flex-col no-print z-10">
+    <aside className="sidebar-left w-80 h-full bg-[#111115] border-r border-[#222228] text-white flex flex-col no-print z-10">
       <div className="p-5 font-black text-lg border-b border-[#222228] tracking-wider uppercase text-zinc-100 flex items-center justify-between">
         <span>Cartas del Juego</span>
+        <button onClick={closeSidebars} className="md:hidden text-zinc-400 hover:text-white cursor-pointer">✕</button>
         <span className="text-xs bg-[#2f6f8f]/30 text-[#2f6f8f] font-mono px-2 py-0.5 rounded border border-[#2f6f8f]/20">
           {items.length}
         </span>

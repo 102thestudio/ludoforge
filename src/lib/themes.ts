@@ -73,6 +73,106 @@ export const THEMES: Record<string, any> = {
       rare: { glow: "none", border: "#2196F3" }, epic: { glow: "none", border: "#9C27B0" },
       legendary: { glow: "0 0 4px rgba(255,215,0,0.4)", border: "#FFC107" }
     }
+  },
+  retro: {
+    name: "Retro Arcade", preview: "🕹️",
+    colors: { primary: "#1a1a2e", secondary: "#16213e", accent: "#e94560", text: "#eaeaea", textLight: "#ffffff", border: "#e94560", cardBack: "#0f3460" },
+    fonts: { title: "'Press Start 2P', 'Outfit', monospace", body: "'Inter', sans-serif", stats: "'Outfit', monospace", ui: "'Inter', sans-serif" },
+    effects: { borderRadius: "0px", borderWidth: "2px", borderStyle: "solid", shadow: "0 0 20px rgba(233,69,96,0.3), inset 0 0 20px rgba(0,0,0,0.4)", cardPadding: "0.4cm", pattern: "none" },
+    categories: {
+      attack:   { background: "linear-gradient(160deg, #b71c1c, #e53935)", textColor: "#ffcdd2", icon: "💥", borderColor: "#ff5252" },
+      defense:  { background: "linear-gradient(160deg, #1b5e20, #43a047)", textColor: "#c8e6c9", icon: "🛡️", borderColor: "#66bb6a" },
+      magic:    { background: "linear-gradient(160deg, #4a148c, #7b1fa2)", textColor: "#e1bee7", icon: "✨", borderColor: "#ce93d8" },
+      event:    { background: "linear-gradient(160deg, #e65100, #fb8c00)", textColor: "#fff3e0", icon: "⚡", borderColor: "#ffa726" },
+      healing:  { background: "linear-gradient(160deg, #00695c, #26a69a)", textColor: "#b2dfdb", icon: "💚", borderColor: "#4db6ac" },
+      role:     { background: "linear-gradient(160deg, #283593, #5c6bc0)", textColor: "#c5cae9", icon: "🎭", borderColor: "#7986cb" },
+      property: { background: "linear-gradient(160deg, #33691e, #689f38)", textColor: "#dcedc8", icon: "🏠", borderColor: "#8bc34a" },
+      question: { background: "linear-gradient(160deg, #0f3460, #1a1a2e)", textColor: "#e94560", icon: "❓", borderColor: "#e94560" },
+      answer:   { background: "linear-gradient(160deg, #16213e, #1a1a2e)", textColor: "#eaeaea", icon: "💬", borderColor: "#533483" },
+      action:   { background: "linear-gradient(160deg, #c62828, #e53935)", textColor: "#ffcdd2", icon: "🎯", borderColor: "#ef5350" },
+      wildcard: { background: "linear-gradient(160deg, #f9a825, #fdd835)", textColor: "#1a1a2e", icon: "🃏", borderColor: "#ffee58" }
+    },
+    back: { background: "linear-gradient(135deg, #0f3460, #1a1a2e, #0f3460)", textColor: "#e94560", borderColor: "#e94560", pattern: "none" },
+    rarity: {
+      common: { glow: "none", border: "#78909c" }, uncommon: { glow: "0 0 6px #4caf50", border: "#4caf50" },
+      rare: { glow: "0 0 10px #2196f3", border: "#2196f3" }, epic: { glow: "0 0 14px #9c27b0", border: "#9c27b0" },
+      legendary: { glow: "0 0 18px #e94560, 0 0 36px rgba(233,69,96,0.3)", border: "#e94560" }
+    }
+  },
+  ocean: {
+    name: "Océano Profundo", preview: "🌊",
+    colors: { primary: "#0a192f", secondary: "#112240", accent: "#64ffda", text: "#ccd6f6", textLight: "#ffffff", border: "#233554", cardBack: "#0a192f" },
+    fonts: { title: "'Outfit', 'Helvetica Neue', sans-serif", body: "'Inter', sans-serif", stats: "'Outfit', monospace", ui: "'Inter', sans-serif" },
+    effects: { borderRadius: "12px", borderWidth: "1px", borderStyle: "solid", shadow: "0 4px 20px rgba(0,0,0,0.3)", cardPadding: "0.4cm", pattern: "none" },
+    categories: {
+      attack:   { background: "linear-gradient(160deg, #b71c1c, #d32f2f)", textColor: "#ffcdd2", icon: "⚔️", borderColor: "#ef5350" },
+      defense:  { background: "linear-gradient(160deg, #004d40, #00897b)", textColor: "#b2dfdb", icon: "🛡️", borderColor: "#26a69a" },
+      magic:    { background: "linear-gradient(160deg, #1a237e, #3949ab)", textColor: "#c5cae9", icon: "✨", borderColor: "#5c6bc0" },
+      event:    { background: "linear-gradient(160deg, #e65100, #f57c00)", textColor: "#fff3e0", icon: "⚡", borderColor: "#ff9800" },
+      healing:  { background: "linear-gradient(160deg, #006064, #00acc1)", textColor: "#b2ebf2", icon: "💚", borderColor: "#00bcd4" },
+      role:     { background: "linear-gradient(160deg, #311b92, #651fff)", textColor: "#d1c4e9", icon: "🎭", borderColor: "#7c4dff" },
+      property: { background: "linear-gradient(160deg, #1b5e20, #388e3c)", textColor: "#c8e6c9", icon: "🏠", borderColor: "#4caf50" },
+      question: { background: "linear-gradient(160deg, #0a192f, #112240)", textColor: "#64ffda", icon: "❓", borderColor: "#64ffda" },
+      answer:   { background: "linear-gradient(160deg, #112240, #1a237e)", textColor: "#ccd6f6", icon: "💬", borderColor: "#64ffda" },
+      action:   { background: "linear-gradient(160deg, #880e4f, #c2185b)", textColor: "#fce4ec", icon: "🎯", borderColor: "#e91e63" },
+      wildcard: { background: "linear-gradient(160deg, #f57f17, #fbc02d)", textColor: "#1a1a2e", icon: "🃏", borderColor: "#fdd835" }
+    },
+    back: { background: "linear-gradient(135deg, #0a192f, #112240, #0a192f)", textColor: "#64ffda", borderColor: "#64ffda", pattern: "none" },
+    rarity: {
+      common: { glow: "none", border: "#546e7a" }, uncommon: { glow: "0 0 6px #26a69a", border: "#26a69a" },
+      rare: { glow: "0 0 10px #42a5f5", border: "#42a5f5" }, epic: { glow: "0 0 14px #ab47bc", border: "#ab47bc" },
+      legendary: { glow: "0 0 18px #64ffda, 0 0 36px rgba(100,255,218,0.3)", border: "#64ffda" }
+    }
+  },
+  pastel: {
+    name: "Pastel Suave", preview: "🎀",
+    colors: { primary: "#fef9f3", secondary: "#fdf2e9", accent: "#e74c8b", text: "#4a4a4a", textLight: "#7a7a7a", border: "#f0d9c0", cardBack: "#f8e8d8" },
+    fonts: { title: "'Outfit', 'Quicksand', sans-serif", body: "'Inter', 'Quicksand', sans-serif", stats: "'Inter', monospace", ui: "'Inter', sans-serif" },
+    effects: { borderRadius: "16px", borderWidth: "1.5px", borderStyle: "solid", shadow: "0 2px 12px rgba(0,0,0,0.06)", cardPadding: "0.5cm", pattern: "none" },
+    categories: {
+      attack:   { background: "linear-gradient(160deg, #fce4ec, #f8bbd0)", textColor: "#880e4f", icon: "⚔️", borderColor: "#f48fb1" },
+      defense:  { background: "linear-gradient(160deg, #e8f5e9, #c8e6c9)", textColor: "#1b5e20", icon: "🛡️", borderColor: "#a5d6a7" },
+      magic:    { background: "linear-gradient(160deg, #ede7f6, #d1c4e9)", textColor: "#4a148c", icon: "✨", borderColor: "#b39ddb" },
+      event:    { background: "linear-gradient(160deg, #fff3e0, #ffe0b2)", textColor: "#e65100", icon: "⚡", borderColor: "#ffcc80" },
+      healing:  { background: "linear-gradient(160deg, #e0f7fa, #b2ebf2)", textColor: "#006064", icon: "💚", borderColor: "#80deea" },
+      role:     { background: "linear-gradient(160deg, #f3e5f5, #e1bee7)", textColor: "#6a1b9a", icon: "🎭", borderColor: "#ce93d8" },
+      property: { background: "linear-gradient(160deg, #f1f8e9, #dcedc8)", textColor: "#33691e", icon: "🏠", borderColor: "#aed581" },
+      question: { background: "linear-gradient(160deg, #fce4ec, #f8bbd0)", textColor: "#880e4f", icon: "❓", borderColor: "#f48fb1" },
+      answer:   { background: "linear-gradient(160deg, #fff8e1, #ffecb3)", textColor: "#e65100", icon: "💬", borderColor: "#ffe082" },
+      action:   { background: "linear-gradient(160deg, #fbe9e7, #ffccbc)", textColor: "#bf360c", icon: "🎯", borderColor: "#ffab91" },
+      wildcard: { background: "linear-gradient(160deg, #fff9c4, #fff59d)", textColor: "#f57f17", icon: "🃏", borderColor: "#fff176" }
+    },
+    back: { background: "linear-gradient(135deg, #f8e8d8, #fdf2e9, #f8e8d8)", textColor: "#e74c8b", borderColor: "#f0d9c0", pattern: "none" },
+    rarity: {
+      common: { glow: "none", border: "#d7ccc8" }, uncommon: { glow: "none", border: "#a5d6a7" },
+      rare: { glow: "none", border: "#90caf9" }, epic: { glow: "none", border: "#ce93d8" },
+      legendary: { glow: "0 0 8px rgba(231,76,139,0.3)", border: "#e74c8b" }
+    }
+  },
+  nature: {
+    name: "Natura Viva", preview: "🌿",
+    colors: { primary: "#1b2e1b", secondary: "#2d4a2d", accent: "#7cb342", text: "#e8f5e9", textLight: "#ffffff", border: "#4caf50", cardBack: "#1b2e1b" },
+    fonts: { title: "'Outfit', 'Nunito', sans-serif", body: "'Inter', sans-serif", stats: "'Inter', monospace", ui: "'Inter', sans-serif" },
+    effects: { borderRadius: "10px", borderWidth: "1.5px", borderStyle: "solid", shadow: "0 3px 15px rgba(0,0,0,0.25)", cardPadding: "0.4cm", pattern: "none" },
+    categories: {
+      attack:   { background: "linear-gradient(160deg, #b71c1c, #c62828)", textColor: "#ffcdd2", icon: "⚔️", borderColor: "#e53935" },
+      defense:  { background: "linear-gradient(160deg, #1b5e20, #2e7d32)", textColor: "#c8e6c9", icon: "🛡️", borderColor: "#43a047" },
+      magic:    { background: "linear-gradient(160deg, #1a237e, #283593)", textColor: "#c5cae9", icon: "✨", borderColor: "#3949ab" },
+      event:    { background: "linear-gradient(160deg, #e65100, #ef6c00)", textColor: "#fff3e0", icon: "⚡", borderColor: "#f57c00" },
+      healing:  { background: "linear-gradient(160deg, #004d40, #00695c)", textColor: "#b2dfdb", icon: "💚", borderColor: "#00897b" },
+      role:     { background: "linear-gradient(160deg, #4a148c, #6a1b9a)", textColor: "#e1bee7", icon: "🎭", borderColor: "#8e24aa" },
+      property: { background: "linear-gradient(160deg, #2e7d32, #388e3c)", textColor: "#c8e6c9", icon: "🏠", borderColor: "#4caf50" },
+      question: { background: "linear-gradient(160deg, #1b2e1b, #2d4a2d)", textColor: "#7cb342", icon: "❓", borderColor: "#7cb342" },
+      answer:   { background: "linear-gradient(160deg, #2d4a2d, #1b2e1b)", textColor: "#e8f5e9", icon: "💬", borderColor: "#81c784" },
+      action:   { background: "linear-gradient(160deg, #bf360c, #d84315)", textColor: "#fbe9e7", icon: "🎯", borderColor: "#f4511e" },
+      wildcard: { background: "linear-gradient(160deg, #f9a825, #fbc02d)", textColor: "#1b2e1b", icon: "🃏", borderColor: "#fdd835" }
+    },
+    back: { background: "linear-gradient(135deg, #1b2e1b, #2d4a2d, #1b2e1b)", textColor: "#7cb342", borderColor: "#4caf50", pattern: "none" },
+    rarity: {
+      common: { glow: "none", border: "#78909c" }, uncommon: { glow: "0 0 6px #66bb6a", border: "#66bb6a" },
+      rare: { glow: "0 0 10px #42a5f5", border: "#42a5f5" }, epic: { glow: "0 0 14px #ab47bc", border: "#ab47bc" },
+      legendary: { glow: "0 0 18px #7cb342, 0 0 36px rgba(124,179,66,0.3)", border: "#7cb342" }
+    }
   }
 };
 

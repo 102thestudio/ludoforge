@@ -4,21 +4,23 @@ import { useState, useTransition } from 'react';
 import { createProjectAction } from './actions';
 import { usePostHog } from 'posthog-js/react';
 import { UpgradeModal } from '@/components/UpgradeModal';
+import { TemplatePicker } from './TemplatePicker';
 
 export function CreateProjectButton() {
   const [isPending, startTransition] = useTransition();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUpgradeOpen, setIsUpgradeOpen] = useState(false);
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
   const posthog = usePostHog();
 
-  const handleCreate = () => {
+  const handleCreate = (templateId: string) => {
+    setIsPickerOpen(false);
     startTransition(async () => {
       try {
-        const res = await createProjectAction();
+        const res = await createProjectAction(templateId);
         if (res && res.error === 'LIMIT_REACHED') {
-          setIsModalOpen(true);
+          setIsUpgradeOpen(true);
         } else {
-          // Track via PostHog on success
-          posthog.capture('project_created');
+          posthog.capture('project_created', { template: templateId });
         }
       } catch (err) {
         console.error('Project creation failed:', err);
@@ -29,9 +31,9 @@ export function CreateProjectButton() {
   return (
     <>
       <button
-        onClick={handleCreate}
+        onClick={() => setIsPickerOpen(true)}
         disabled={isPending}
-        className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold transition-all shadow-md shadow-indigo-500/20 disabled:opacity-50"
+        className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold transition-all shadow-md shadow-indigo-500/20 disabled:opacity-50 cursor-pointer"
       >
         {isPending ? (
           <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -44,7 +46,8 @@ export function CreateProjectButton() {
         <span>Nuevo Proyecto</span>
       </button>
 
-      <UpgradeModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      {isPickerOpen && <TemplatePicker onSelect={handleCreate} onCancel={() => setIsPickerOpen(false)} />}
+      <UpgradeModal isOpen={isUpgradeOpen} onClose={() => setIsUpgradeOpen(false)} />
     </>
   );
 }

@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 
-export async function createProjectAction() {
+export async function createProjectAction(templateId: string) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -12,7 +12,6 @@ export async function createProjectAction() {
     throw new Error('Unauthorized');
   }
 
-  // Fetch plan
   const { data: profile } = await supabase
     .from('users')
     .select('plan')
@@ -21,7 +20,6 @@ export async function createProjectAction() {
 
   const userPlan = profile?.plan || 'FREE';
 
-  // Fetch current project count
   const { count, error: countError } = await supabase
     .from('projects')
     .select('id', { count: 'exact', head: true })
@@ -42,7 +40,7 @@ export async function createProjectAction() {
       { 
         user_id: user.id, 
         name: 'Nuevo Proyecto LudoForge',
-        game_state: {}
+        game_state: { templateId }
       }
     ])
     .select()
@@ -68,7 +66,7 @@ export async function deleteProjectAction(id: string) {
     .from('projects')
     .delete()
     .eq('id', id)
-    .eq('user_id', user.id); // Double check RLS
+    .eq('user_id', user.id);
 
   if (error) {
     console.error('Error deleting project:', error);
