@@ -51,7 +51,7 @@ export function generarPaginasA4(items: GameItem[], templateId: string, cover: a
 
   // 3. Album (only for sticker_collection)
   if (templateId === 'sticker_collection' && items && items.length > 0) {
-    const albumLayout = tpl.albumLayout || { cols: 4, rows: 3, itemWidth: "4.5cm", itemHeight: "7.5cm" };
+    const albumLayout = tpl.albumLayout || { cols: 3, rows: 3, itemWidth: "6.3cm", itemHeight: "8.8cm" };
     const slotsPerPage = albumLayout.cols * albumLayout.rows;
     const stickerItems = items.filter(it => it.type === 'sticker');
     const totalSlots = Math.max(stickerItems.length, 1);

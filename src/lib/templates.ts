@@ -299,7 +299,7 @@ export const GAME_TEMPLATES: Record<string, any> = {
   "sticker_collection": {
     name: "Colección de Cromos",
     layout: { type: "grid", cols: 3, rows: 3, itemWidth: "6.3cm", itemHeight: "8.8cm", bleed: "0cm", margin: "0cm", mirrorBack: true },
-    albumLayout: { cols: 4, rows: 3, itemWidth: "4.5cm", itemHeight: "7.5cm" },
+    albumLayout: { cols: 3, rows: 3, itemWidth: "6.3cm", itemHeight: "8.8cm" },
     itemTemplates: {
       "sticker": {
         name: "Cromo",
