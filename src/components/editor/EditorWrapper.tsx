@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useGameStore } from '@/store/useGameStore';
 import { useThemeStore } from '@/store/useThemeStore';
+import type { ThemeState } from '@/store/useThemeStore';
 import { useDebounceSave } from '@/hooks/useDebounceSave';
 import { CanvasCenter } from '@/components/editor/CanvasCenter/CanvasCenter';
 import { SidebarLeft } from '@/components/editor/SidebarLeft/SidebarLeft';

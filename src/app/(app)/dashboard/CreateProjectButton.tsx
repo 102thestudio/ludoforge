@@ -16,12 +16,8 @@ export function CreateProjectButton() {
     setIsPickerOpen(false);
     startTransition(async () => {
       try {
-        const res = await createProjectAction(templateId);
-        if (res && res.error === 'LIMIT_REACHED') {
-          setIsUpgradeOpen(true);
-        } else {
-          posthog.capture('project_created', { template: templateId });
-        }
+        await createProjectAction(templateId);
+        posthog.capture('project_created', { template: templateId });
       } catch (err) {
         console.error('Project creation failed:', err);
       }
