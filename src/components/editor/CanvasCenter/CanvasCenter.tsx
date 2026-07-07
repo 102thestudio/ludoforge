@@ -216,7 +216,8 @@ function AlbumRenderer({ slots, cols, rows, templateId, setSelectedItemId }: Alb
                     verticalAlign: 'middle',
                     background: 'rgba(200,200,200,0.05)',
                     cursor: !isPlaceholder ? 'pointer' : 'default',
-                    position: 'relative'
+                    position: 'relative',
+                    overflow: 'hidden'
                   }}
                 >
                   {/* Slot number */}

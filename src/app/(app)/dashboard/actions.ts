@@ -30,9 +30,7 @@ export async function createProjectAction(templateId: string) {
     throw new Error('Database error');
   }
 
-  if (userPlan === 'FREE' && count !== null && count >= 3) {
-    return { error: 'LIMIT_REACHED' };
-  }
+  // Paywall paused - unlimited projects for all users
 
   const { data, error } = await supabase
     .from('projects')

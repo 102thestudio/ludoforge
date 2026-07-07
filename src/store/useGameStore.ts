@@ -142,12 +142,12 @@ export const useGameStore = create<GameState>()(
             coverTitle = "Álbum de Cromos";
             rulesContent = "## Instrucciones\n1. Añade tantos cromos como quieras con el botón '+ Añadir Carta'.\n2. Cada cromo tiene un número único y una imagen.\n3. Las páginas del álbum se generan automáticamente.\n4. Imprime el álbum y los cromos, recórtalos y pégalos en su sitio.";
             defaultItems = [
-              { id: uuidv4(), type: "sticker", number: 1, title: "Cromo 1" },
-              { id: uuidv4(), type: "sticker", number: 2, title: "Cromo 2" },
-              { id: uuidv4(), type: "sticker", number: 3, title: "Cromo 3" },
-              { id: uuidv4(), type: "sticker", number: 4, title: "Cromo 4" },
-              { id: uuidv4(), type: "sticker", number: 5, title: "Cromo 5" },
-              { id: uuidv4(), type: "sticker", number: 6, title: "Cromo 6" }
+              { id: uuidv4(), type: "sticker", number: 1, title: "Estrella Principal" },
+              { id: uuidv4(), type: "sticker", number: 2, title: "Compañero" },
+              { id: uuidv4(), type: "sticker", number: 3, title: "Villano" },
+              { id: uuidv4(), type: "sticker", number: 4, title: "Objeto Raro" },
+              { id: uuidv4(), type: "sticker", number: 5, title: "Escena Épica" },
+              { id: uuidv4(), type: "sticker", number: 6, title: "Lugar Secreto" }
             ];
           } else if (id === 'monopoly') {
             coverTitle = "Monopoly Board";

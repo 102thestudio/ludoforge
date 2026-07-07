@@ -26,17 +26,23 @@ export function EditorWrapper({
 
   useEffect(() => {
     if (initialState && Object.keys(initialState).length > 0) {
-      if (initialState.themeState) {
-        const ts = initialState.themeState;
-        if (ts.themeId) useThemeStore.setState({ themeId: ts.themeId });
-        if (ts.themeOverrides) useThemeStore.setState({ themeOverrides: ts.themeOverrides });
-        if (ts.backStyle) useThemeStore.setState({ backStyle: ts.backStyle });
-        if (ts.backColor) useThemeStore.setState({ backColor: ts.backColor });
-        if (ts.backDesign) useThemeStore.setState({ backDesign: ts.backDesign });
-        if (ts.showCropMarks !== undefined) useThemeStore.setState({ showCropMarks: ts.showCropMarks });
-        if (ts.showBleed !== undefined) useThemeStore.setState({ showBleed: ts.showBleed });
+      // Theme store
+      const ts = (initialState as any).themeState as Partial<ThemeState> | undefined;
+      if (ts) {
+        const { themeId, themeOverrides } = ts;
+        const updates: Partial<ThemeState> = {};
+        if (themeId !== undefined) updates.themeId = themeId;
+        if (themeOverrides !== undefined) updates.themeOverrides = themeOverrides as any;
+        useThemeStore.setState(updates);
       }
-      useGameStore.setState(initialState);
+      // Game store - clear items if not present in initialState (new project)
+      const stateToApply: Record<string, any> = { ...initialState };
+      delete stateToApply.themeState;
+      if (!stateToApply.items) {
+        stateToApply.items = [];
+      }
+      useGameStore.setState(stateToApply);
+      // If template set but items empty, initialize defaults
       const state = useGameStore.getState();
       if (state.templateId && (!state.items || state.items.length === 0)) {
         useGameStore.getState().setTemplate(state.templateId);
@@ -62,6 +68,12 @@ export function EditorWrapper({
         <SidebarRight />
       </div>
 
+      {/* Back to dashboard button (desktop) */}
+      <a href="/dashboard" className="hidden md:flex fixed top-4 left-4 z-[60] bg-[#111115]/80 backdrop-blur border border-[#222228] px-3 py-1.5 rounded-full text-xs text-zinc-400 hover:text-white hover:border-[#333] transition-colors items-center gap-2 no-print cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        Dashboard
+      </a>
+
       {/* Mobile layout */}
       <div className="md:hidden h-full relative">
         <CanvasCenter />
@@ -83,6 +95,10 @@ export function EditorWrapper({
 
         {/* Mobile bottom nav */}
         <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#111115]/95 backdrop-blur border-t border-[#222228] flex items-center justify-around py-2 px-4 safe-area-bottom">
+          <a href="/dashboard" className="flex flex-col items-center gap-0.5 py-1 px-3 text-zinc-400 hover:text-white transition-colors cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            <span className="text-[10px] font-semibold">Volver</span>
+          </a>
           <button onClick={toggleLeftSidebar} className="flex flex-col items-center gap-0.5 py-1 px-3 text-zinc-400 hover:text-white transition-colors cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             <span className="text-[10px] font-semibold">Cartas</span>
