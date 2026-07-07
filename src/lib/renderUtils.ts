@@ -2,7 +2,7 @@ import { GAME_TEMPLATES } from './templates';
 import { GameItem } from '../store/useGameStore';
 
 export interface PageData {
-  type: 'cover' | 'rules' | 'grid' | 'board';
+  type: 'cover' | 'rules' | 'grid' | 'board' | 'album';
   label: string;
   // For grids
   cols?: number;
@@ -15,6 +15,8 @@ export interface PageData {
   coverData?: any;
   // For rules
   rulesData?: string;
+  // For album pages
+  albumSlots?: GameItem[];
 }
 
 export function generarPaginasA4(items: GameItem[], templateId: string, cover: any, rules: any): PageData[] {
@@ -47,7 +49,38 @@ export function generarPaginasA4(items: GameItem[], templateId: string, cover: a
     });
   }
 
-  // 3. Items (Front and Back)
+  // 3. Album (only for sticker_collection)
+  if (templateId === 'sticker_collection' && items && items.length > 0) {
+    const albumLayout = tpl.albumLayout || { cols: 4, rows: 3, itemWidth: "4.5cm", itemHeight: "7.5cm" };
+    const slotsPerPage = albumLayout.cols * albumLayout.rows;
+    const stickerItems = items.filter(it => it.type === 'sticker');
+    const totalSlots = Math.max(stickerItems.length, 1);
+    const numAlbumSheets = Math.ceil(totalSlots / slotsPerPage);
+
+    for (let s = 0; s < numAlbumSheets; s++) {
+      const albumSlots: GameItem[] = [];
+      for (let i = 0; i < slotsPerPage; i++) {
+        const slotIndex = s * slotsPerPage + i;
+        if (slotIndex < stickerItems.length) {
+          albumSlots.push(stickerItems[slotIndex]);
+        } else {
+          albumSlots.push({ id: `album-empty-${s}-${i}`, type: 'placeholder', number: slotIndex + 1 });
+        }
+      }
+      pages.push({
+        type: 'album',
+        label: `Sección: Álbum - Página ${s + 1}`,
+        cols: albumLayout.cols,
+        rows: albumLayout.rows,
+        itemWidth: albumLayout.itemWidth,
+        itemHeight: albumLayout.itemHeight,
+        albumSlots: albumSlots,
+        isBack: false
+      });
+    }
+  }
+
+  // 4. Items (Front and Back)
   if (items && items.length > 0) {
     const layout = tpl.layout;
     const itemsPerPage = layout.cols * layout.rows;

@@ -48,7 +48,16 @@ body {
 }
 
 /* ==========================================================================
-   DISEÑO DE LA CUADRÍCULA (TABLA 3X3 PARA CARTAS)
+   ÁLBUM DE CROMOS (TABLA PARA EL LIBRO DE COLECCIÓN)
+   ========================================================================== */
+.album-table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
+/* ==========================================================================
+   DISEÑO DE LA CUADRÍGULA (TABLA 3X3 PARA CARTAS)
    ========================================================================== */
 .grid-table {
   width: 18.9cm;
@@ -190,6 +199,10 @@ body {
 
   .grid-table.show-bleed td {
     border: none !important;
+  }
+
+  .album-table td {
+    border: 0.5pt dashed #999 !important;
   }
 }
 

@@ -256,6 +256,66 @@ export const GAME_TEMPLATES: Record<string, any> = {
       }
     }
   },
+  "poker": {
+    name: "Póker (Baraja Francesa)",
+    layout: { type: "grid", cols: 3, rows: 3, itemWidth: "6.3cm", itemHeight: "8.8cm", bleed: "0cm", margin: "0cm", mirrorBack: true },
+    itemTemplates: {
+      "card": {
+        name: "Carta de Póker",
+        defaultCategory: "action",
+        zones: [
+          { id: "header", type: "bar", position: "top", height: "13%", contains: ["rank", "suit"] },
+          { id: "artwork", type: "image", position: "middle", height: "55%", contains: ["image"] },
+          { id: "footer", type: "bar", position: "bottom", height: "13%", contains: ["rank", "suit"] }
+        ],
+        fields: [
+          { id: "rank", type: "select", label: "Valor", options: ["2","3","4","5","6","7","8","9","10","J","Q","K","A"] },
+          { id: "suit", type: "select", label: "Palo", options: ["♠","♥","♦","♣"] },
+          { id: "image", type: "image", label: "Ilustración" }
+        ]
+      }
+    }
+  },
+  "spanish_deck": {
+    name: "Baraja Española",
+    layout: { type: "grid", cols: 3, rows: 3, itemWidth: "6.3cm", itemHeight: "8.8cm", bleed: "0cm", margin: "0cm", mirrorBack: true },
+    itemTemplates: {
+      "card": {
+        name: "Carta Española",
+        defaultCategory: "action",
+        zones: [
+          { id: "header", type: "bar", position: "top", height: "13%", contains: ["rank", "suit"] },
+          { id: "artwork", type: "image", position: "middle", height: "55%", contains: ["image"] },
+          { id: "footer", type: "bar", position: "bottom", height: "13%", contains: ["rank", "suit"] }
+        ],
+        fields: [
+          { id: "rank", type: "select", label: "Valor", options: ["1","2","3","4","5","6","7","8","9","Sota","Caballo","Rey"] },
+          { id: "suit", type: "select", label: "Palo", options: ["Oros","Copas","Espadas","Bastos"] },
+          { id: "image", type: "image", label: "Ilustración" }
+        ]
+      }
+    }
+  },
+  "sticker_collection": {
+    name: "Colección de Cromos",
+    layout: { type: "grid", cols: 3, rows: 3, itemWidth: "6.3cm", itemHeight: "8.8cm", bleed: "0cm", margin: "0cm", mirrorBack: true },
+    albumLayout: { cols: 4, rows: 3, itemWidth: "4.5cm", itemHeight: "7.5cm" },
+    itemTemplates: {
+      "sticker": {
+        name: "Cromo",
+        defaultCategory: "wildcard",
+        zones: [
+          { id: "header", type: "bar", position: "top", height: "15%", contains: ["number", "title"] },
+          { id: "artwork", type: "image", position: "middle", height: "60%", contains: ["image"] }
+        ],
+        fields: [
+          { id: "number", type: "number", label: "Nº de cromo" },
+          { id: "title", type: "text", label: "Título / Nombre" },
+          { id: "image", type: "image", label: "Imagen del cromo" }
+        ]
+      }
+    }
+  },
   "friends_game": {
     name: "Juego de Amigos (Confesión)",
     layout: { type: "grid", cols: 3, rows: 3, itemWidth: "6.3cm", itemHeight: "8.8cm", bleed: "0cm", margin: "0cm", mirrorBack: true },

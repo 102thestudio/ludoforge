@@ -90,6 +90,61 @@ function CardFront({ card, style, theme, templateId, isSelected, onClick }: { ca
 
   const zones = itemTpl.zones || [];
 
+  // Custom layout for Poker cards
+  if ((templateId === 'poker' || templateId === 'spanish_deck') && card.type === 'card') {
+    const rankFontSize = card.rank && card.rank.length > 1 ? '12pt' : '16pt';
+    const suitColor = (s: string) => {
+      if (s === '♥' || s === '♦') return '#cc0000';
+      if (s === '♠' || s === '♣') return '#000';
+      return '#000';
+    };
+    const color = suitColor(card.suit || '');
+
+    return (
+      <div
+        className={`card ${isSelected ? 'editing' : ''}`}
+        onClick={onClick}
+        style={{
+          background: '#FFFFFF',
+          color: color,
+          border: border,
+          borderRadius: theme.effects.borderRadius,
+          boxShadow: boxShadow,
+          padding: '0.2cm',
+          position: 'relative',
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
+          cursor: 'pointer',
+          fontFamily: "'Inter', sans-serif"
+        }}
+      >
+        {/* Top-left corner: rank + suit */}
+        <div style={{ position: 'absolute', top: '0.15cm', left: '0.2cm', display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1, zIndex: 2 }}>
+          <span style={{ fontSize: rankFontSize, fontWeight: 900, color }}>{card.rank || 'A'}</span>
+          <span style={{ fontSize: '10pt', color, marginTop: '-2px' }}>{card.suit || '♠'}</span>
+        </div>
+
+        {/* Bottom-right corner: rank + suit (inverted) */}
+        <div style={{ position: 'absolute', bottom: '0.15cm', right: '0.2cm', display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1, transform: 'rotate(180deg)', zIndex: 2 }}>
+          <span style={{ fontSize: rankFontSize, fontWeight: 900, color }}>{card.rank || 'A'}</span>
+          <span style={{ fontSize: '10pt', color, marginTop: '-2px' }}>{card.suit || '♠'}</span>
+        </div>
+
+        {/* Center image */}
+        {card.image ? (
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', margin: '0.3cm' }}>
+            <img src={card.image} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} alt="" />
+          </div>
+        ) : (
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '42pt', color: color, opacity: 0.3 }}>
+            {card.suit || '♠'}
+          </div>
+        )}
+      </div>
+    );
+  }
+
   // Custom layout for Monopoly Property cards
   if (templateId === 'monopoly' && card.type === 'property') {
     return (

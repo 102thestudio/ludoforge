@@ -8,7 +8,7 @@ import { CardRenderer, CoverRenderer } from './CardRenderer';
 
 import { useUIStore } from '@/store/useUIStore';
 
-function parseMarkdown(md: string): string {
+export function parseMarkdown(md: string): string {
   if (!md) return "";
   let html = md;
   
@@ -137,6 +137,16 @@ export function CanvasCenter() {
                   </tbody>
                 </table>
               )}
+
+              {page.type === 'album' && (
+                <AlbumRenderer
+                  slots={page.albumSlots || []}
+                  cols={page.cols || 4}
+                  rows={page.rows || 3}
+                  templateId={templateId}
+                  setSelectedItemId={setSelectedItemId}
+                />
+              )}
             </div>
           </div>
         ))}
@@ -158,7 +168,138 @@ interface MonopolyBoardProps {
   onSelectCard: (id: string | null) => void;
 }
 
-function MonopolyBoard({ items, cover, onSelectCard }: MonopolyBoardProps) {
+interface AlbumRendererProps {
+  slots: any[];
+  cols: number;
+  rows: number;
+  templateId: string;
+  setSelectedItemId: (id: string | null) => void;
+}
+
+function AlbumRenderer({ slots, cols, rows, templateId, setSelectedItemId }: AlbumRendererProps) {
+  const albumItemWidth = `${(18.9 / cols)}cm`;
+  const albumItemHeight = `${(26.4 / rows)}cm`;
+
+  return (
+    <table className="album-table" style={{
+      width: '18.9cm',
+      height: '26.4cm',
+      position: 'absolute',
+      left: '1.05cm',
+      top: '1.65cm',
+      borderCollapse: 'collapse',
+      borderSpacing: 0,
+      margin: 0,
+      padding: 0,
+      boxSizing: 'border-box',
+      tableLayout: 'fixed'
+    }}>
+      <tbody>
+        {Array.from({ length: rows }).map((_, r) => (
+          <tr key={r}>
+            {Array.from({ length: cols }).map((_, c) => {
+              const i = r * cols + c;
+              const slot = slots[i];
+              if (!slot) return <td key={c} style={{ width: albumItemWidth, height: albumItemHeight, border: '0.5pt dashed #ddd', padding: 0, boxSizing: 'border-box' }} />;
+
+              const hasContent = slot.type !== 'placeholder' && slot.image;
+              return (
+                <td
+                  key={c}
+                  onClick={() => slot.type !== 'placeholder' && setSelectedItemId(slot.id)}
+                  style={{
+                    width: albumItemWidth,
+                    height: albumItemHeight,
+                    border: hasContent ? '0.5pt dashed #4CAF50' : '0.5pt dashed #ccc',
+                    padding: '0.15cm',
+                    boxSizing: 'border-box',
+                    verticalAlign: 'middle',
+                    background: hasContent ? 'rgba(76,175,80,0.03)' : 'rgba(200,200,200,0.05)',
+                    cursor: slot.type !== 'placeholder' ? 'pointer' : 'default',
+                    position: 'relative'
+                  }}
+                >
+                  {/* Slot number */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '0.05cm',
+                    left: '0.1cm',
+                    fontSize: '6pt',
+                    fontWeight: 800,
+                    color: '#999',
+                    fontFamily: "'Inter', sans-serif",
+                    zIndex: 2
+                  }}>
+                    #{slot.number || i + 1}
+                  </div>
+
+                  {/* Sticker image */}
+                  <div style={{
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    overflow: 'hidden'
+                  }}>
+                    {slot.image ? (
+                      <img
+                        src={slot.image}
+                        alt={slot.title || `Cromo ${slot.number || i + 1}`}
+                        style={{ maxWidth: '90%', maxHeight: '80%', objectFit: 'contain', borderRadius: '2px' }}
+                      />
+                    ) : (
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '2px',
+                        color: '#ccc',
+                        fontSize: '6pt',
+                        fontFamily: "'Inter', sans-serif"
+                      }}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.3 }}>
+                          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                          <circle cx="8.5" cy="8.5" r="1.5"/>
+                          <polyline points="21 15 16 10 5 21"/>
+                        </svg>
+                        <span style={{ textTransform: 'uppercase', letterSpacing: '0.3px' }}>
+                          Pega aquí
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Title */}
+                  {slot.title && (
+                    <div style={{
+                      position: 'absolute',
+                      bottom: '0.05cm',
+                      fontSize: '5.5pt',
+                      color: '#888',
+                      fontFamily: "'Inter', sans-serif",
+                      textAlign: 'center',
+                      width: '90%',
+                      left: '5%',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap'
+                    }}>
+                      {slot.title}
+                    </div>
+                  )}
+                </td>
+              );
+            })}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+export function MonopolyBoard({ items, cover, onSelectCard }: MonopolyBoardProps) {
   const props = items.filter(it => it.title || it.text);
   const cornersData = cover?.boardCorners || {
     salida: "🏁 SALIDA",

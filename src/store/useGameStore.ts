@@ -114,6 +114,41 @@ export const useGameStore = create<GameState>()(
               { id: uuidv4(), type: "vote", title: "El Dramático", text: "¿Quién es más probable que termine llorando en una fiesta por un malentendido?" },
               { id: uuidv4(), type: "dare", title: "Imitación", text: "Imita al jugador de tu izquierda (gestos, voz) hasta que sea tu próximo turno." }
             ];
+          } else if (id === 'poker') {
+            coverTitle = "Póker Personalizado";
+            rulesContent = "## Cómo Jugar al Póker\n1. Cada jugador recibe 2 cartas.\n2. Combínalas con 5 comunitarias para formar la mejor mano.\n3. Gana la mejor combinación: pareja, trío, escalera, color, póker, escalera de color.";
+            const palos = ["♠","♥","♦","♣"];
+            const valores = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"];
+            defaultItems = [];
+            for (const p of palos) {
+              for (const v of valores) {
+                defaultItems.push({ id: uuidv4(), type: "card", rank: v, suit: p, title: `${v} ${p}` });
+              }
+            }
+            defaultItems.push({ id: uuidv4(), type: "card", rank: "Joker", suit: "🃏", title: "Joker" });
+            defaultItems.push({ id: uuidv4(), type: "card", rank: "Joker", suit: "🃏", title: "Joker" });
+          } else if (id === 'spanish_deck') {
+            coverTitle = "Baraja Española Personalizada";
+            rulesContent = "## Cómo Jugar\n1. La baraja española tiene 48 cartas divididas en 4 palos: Oros, Copas, Espadas y Bastos.\n2. Cada palo tiene 12 cartas: del 1 al 9, Sota, Caballo y Rey.\n3. Ideal para juegos como el chinchón, la brisca, el tute o la escoba.";
+            const palosEsp = ["Oros","Copas","Espadas","Bastos"];
+            const valoresEsp = ["1","2","3","4","5","6","7","8","9","Sota","Caballo","Rey"];
+            defaultItems = [];
+            for (const p of palosEsp) {
+              for (const v of valoresEsp) {
+                defaultItems.push({ id: uuidv4(), type: "card", rank: v, suit: p, title: `${v} de ${p}` });
+              }
+            }
+          } else if (id === 'sticker_collection') {
+            coverTitle = "Álbum de Cromos";
+            rulesContent = "## Instrucciones\n1. Añade tantos cromos como quieras con el botón '+ Añadir Carta'.\n2. Cada cromo tiene un número único y una imagen.\n3. Las páginas del álbum se generan automáticamente.\n4. Imprime el álbum y los cromos, recórtalos y pégalos en su sitio.";
+            defaultItems = [
+              { id: uuidv4(), type: "sticker", number: 1, title: "Cromo 1" },
+              { id: uuidv4(), type: "sticker", number: 2, title: "Cromo 2" },
+              { id: uuidv4(), type: "sticker", number: 3, title: "Cromo 3" },
+              { id: uuidv4(), type: "sticker", number: 4, title: "Cromo 4" },
+              { id: uuidv4(), type: "sticker", number: 5, title: "Cromo 5" },
+              { id: uuidv4(), type: "sticker", number: 6, title: "Cromo 6" }
+            ];
           } else if (id === 'monopoly') {
             coverTitle = "Monopoly Board";
             rulesContent = "## Cómo Jugar\n1. Lanza los dados para moverte por el tablero.\n2. Compra propiedades libres.\n3. Cobra alquiler a los jugadores que caigan en tus casillas.";
@@ -175,9 +210,17 @@ export const useGameStore = create<GameState>()(
           rules: { ...state.rules, content }
         })),
 
-        addItem: (type) => set((state) => ({
-          items: [...state.items, { id: uuidv4(), type }]
-        })),
+        addItem: (type) => set((state) => {
+          const newItem: GameItem = { id: uuidv4(), type };
+          if (state.templateId === 'sticker_collection' && type === 'sticker') {
+            const maxNum = state.items
+              .filter(it => it.type === 'sticker')
+              .reduce((max, it) => Math.max(max, Number(it.number) || 0), 0);
+            newItem.number = maxNum + 1;
+            newItem.title = `Cromo ${maxNum + 1}`;
+          }
+          return { items: [...state.items, newItem] };
+        }),
 
         updateItem: (id, updates) => set((state) => ({
           items: state.items.map((item) => 

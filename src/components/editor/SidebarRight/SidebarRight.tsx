@@ -291,6 +291,9 @@ export function SidebarRight() {
               <option value="drinking_game">🍻 Juego de Beber (Party)</option>
               <option value="couples_game">❤️ Juego de Parejas</option>
               <option value="friends_game">💬 Juego de Amigos (Confesión)</option>
+              <option value="poker">🃏 Póker (Baraja Francesa)</option>
+              <option value="spanish_deck">🃀 Baraja Española</option>
+              <option value="sticker_collection">📖 Colección de Cromos</option>
             </select>
           </div>
 
