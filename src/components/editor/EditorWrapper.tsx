@@ -47,12 +47,13 @@ export function EditorWrapper({
   return (
     <div className="h-screen w-screen overflow-hidden bg-black app-layout font-sans relative">
       {/* Auto-Save Indicator */}
-      <div className="absolute top-4 right-4 z-[60] bg-[#111115]/80 backdrop-blur border border-[#222228] px-3 py-1.5 rounded-full text-xs text-zinc-400 flex items-center gap-2 no-print">
-        {saveStatus === 'saving' && <><div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" /> Guardando...</>}
-        {saveStatus === 'saved' && <><div className="w-2 h-2 rounded-full bg-emerald-500" /> Guardado</>}
-        {saveStatus === 'error' && <><div className="w-2 h-2 rounded-full bg-red-500" /> Error</>}
-        {saveStatus === 'idle' && <><div className="w-2 h-2 rounded-full bg-zinc-500" /> Sincronizado</>}
-      </div>
+      {saveStatus !== 'idle' && (
+        <div className="absolute top-4 right-4 z-[60] bg-[#111115]/80 backdrop-blur border border-[#222228] px-3 py-1.5 rounded-full text-xs text-zinc-400 flex items-center gap-2 no-print">
+          {saveStatus === 'saving' && <><div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" /> Guardando...</>}
+          {saveStatus === 'saved' && <><div className="w-2 h-2 rounded-full bg-emerald-500" /> Guardado</>}
+          {saveStatus === 'error' && <><div className="w-2 h-2 rounded-full bg-red-500" /> Error</>}
+        </div>
+      )}
 
       {/* Desktop layout */}
       <div className="hidden md:flex h-full">
